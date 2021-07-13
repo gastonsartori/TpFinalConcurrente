@@ -27,32 +27,55 @@ public class Main {
 
         InvariantesT inv = new InvariantesT();
 
-        Thread hilo1 = new ThreadLinea1(monitor,RedDePetri,inv,0);
-        Thread hilo2 = new ThreadLinea2(monitor,RedDePetri,inv,1);
-        Thread hilo3 = new ThreadLinea3(monitor,RedDePetri,inv,2);
-        Thread hilo4 = new ThreadLinea4(monitor,RedDePetri,inv,3);
+        Thread[] hilos = new Thread[12];
+
+        for (int i = 0; i < 3; i++) {
+            hilos[i]= new ThreadLinea1(monitor,RedDePetri,inv,0);
+        }
+        for (int i = 3; i < 6; i++) {
+            hilos[i]= new ThreadLinea2(monitor,RedDePetri,inv,1);
+        }
+        for (int i = 6; i < 9; i++) {
+            hilos[i]= new ThreadLinea3(monitor,RedDePetri,inv,2);
+        }
+        for (int i = 9; i < 12; i++) {
+            hilos[i]= new ThreadLinea4(monitor,RedDePetri,inv,3);
+        }
+
+
         //Thread hilo2 = new Thread(new ThreadLinea2(monitor,RedDePetri,inv,1));
         //Thread hilo3 = new Thread(new ThreadLinea3(monitor,RedDePetri,inv,2));
         //Thread hilo4 = new Thread(new ThreadLinea4(monitor,RedDePetri,inv,3));
 
-        hilo1.start();
-        hilo2.start();
-        hilo3.start();
-        hilo4.start();
-
-        while(monitor.getContador()<100){
-            System.out.println("dentro de while");
+        for (int i = 0; i < 12; i++) {
+            hilos[i].start();
         }
-        System.out.println("sali de while");
+        //hilo1.start();
+        //hilo2.start();
+        // hilo3.start();
+        //hilo4.start();
 
-        hilo1.interrupt();
-        hilo2.interrupt();
-        hilo3.interrupt();
-        hilo4.interrupt();
+        while(monitor.getContador()<1000){
+            System.out.print("");
+        }
+
+        //hilo1.fin();
+        //hilo2.fin();
+        //hilo3.fin();
+        //hilo4.fin();
+
+        for (int i = 0; i < 12; i++) {
+            hilos[i].interrupt();
+        }
+
+        //hilo1.interrupt();
+        //hilo2.interrupt();
+        //hilo3.interrupt();
+        //hilo4.interrupt();
 
         inv.printInvT();
-
-
+        inv.printCantDisparosInvT();
+        //System.out.println(inv.getInvariantesT());
 
     }
 }

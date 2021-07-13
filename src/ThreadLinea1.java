@@ -1,37 +1,36 @@
+public class ThreadLinea1 extends ThreadLinea {
 
-public class ThreadLinea1 extends Thread {
-
-    private Monitor monitor;
-    private RdP red;
-    private InvariantesT inv;
     private int linea;
-
     public ThreadLinea1(Monitor monitor, RdP red,InvariantesT inv, int linea) {
-        this.monitor = monitor;
-        this.red=red;
-        this.inv=inv;
+
+        super(monitor,red,inv);
         this.linea=linea;
+
     }
 
     @Override
     public void run() {
 
-        while(!isInterrupted()){
+        while(!(currentThread().isInterrupted())){
 
-            dispararTransicion(0);  //TRANSICION 1
-            inv.conteoTransiciones(1,linea);
+            try{
+                dispararTransicion(0);  //TRANSICION 1
+                inv.conteoTransiciones(1,linea);
+                inv.logTransicion(1,linea);
 
-            dispararTransicion(7);  //TRANSICION 2
-            inv.conteoTransiciones(2,linea);
+                dispararTransicion(7);  //TRANSICION 2
+                inv.conteoTransiciones(2,linea);
+                inv.logTransicion(2,linea);
 
-            dispararTransicion(8);  //TRANSICION 3
-            inv.conteoTransiciones(3,linea);
+                dispararTransicion(8);  //TRANSICION 3
+                inv.conteoTransiciones(3,linea);
+                inv.logTransicion(3,linea);
 
+                monitor.incContador();
+
+            }catch(InterruptedException e){
+                return;
+            }
         }
-
-    }
-
-    public void dispararTransicion(int transicion){
-        monitor.disparar(transicion);
     }
 }

@@ -53,10 +53,7 @@ public class RdP {
         habilitacion();
         if(chequeoInvP()){
            System.out.println("ERROR");
-        }else{
-            System.out.println("NO ERROR");
         }
-
     }
 
     public int getCantP() { return cantP; }
