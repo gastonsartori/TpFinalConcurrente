@@ -6,11 +6,13 @@ public class Monitor {
     private RdP RedDePetri;
     private ReentrantLock mutex;
     private Condition espera;
+    private int contador;
 
     public Monitor(RdP redDePetri) {
         RedDePetri = redDePetri;
         mutex = new ReentrantLock();
         espera=mutex.newCondition();
+        contador=0;
     }
 
     public void disparar(int transicion){
@@ -19,7 +21,6 @@ public class Monitor {
 
         while(!(RedDePetri.isHabilitada(transicion))){
             try {
-                System.out.println("no me habilitaron :(");
                 espera.await();
             } catch (InterruptedException e) {
                 e.printStackTrace();
@@ -28,8 +29,17 @@ public class Monitor {
 
         RedDePetri.disparo(transicion);
 
+        contador++;
+        System.out.println(contador);
+
         espera.signalAll();
 
         mutex.unlock();
     }
+
+    public int getContador(){
+        return contador;
+    }
+
+
 }

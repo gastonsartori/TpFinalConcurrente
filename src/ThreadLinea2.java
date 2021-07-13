@@ -1,6 +1,6 @@
 import static java.lang.Thread.currentThread;
 
-public class ThreadLinea2 implements Runnable{
+public class ThreadLinea2 extends Thread {
 
     private Monitor monitor;
     private RdP red;
@@ -17,7 +17,7 @@ public class ThreadLinea2 implements Runnable{
     @Override
     public void run() {
 
-        //while(!(currentThread().isInterrupted())){
+        while(!isInterrupted()){
 
             dispararTransicion(9);  //TRANSICION 4
             inv.conteoTransiciones(4,linea);
@@ -28,7 +28,7 @@ public class ThreadLinea2 implements Runnable{
             dispararTransicion(11);  //TRANSICION 6
             inv.conteoTransiciones(6,linea);
 
-        //}
+        }
 
     }
 

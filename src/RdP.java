@@ -9,11 +9,12 @@ public class RdP {
 
     private boolean[]   habilitadas;
 
-    public RdP(int[] marcado, int[][] matrizW, int[][] matrizB, int cantT, int cantP) {
+    public RdP(int[] marcado, int[][] matrizW, int[][] matrizB, int[][] matrizPinv, int cantT, int cantP) {
         this.marcado = marcado;
         this.matrizW = matrizW;
         this.matrizB = matrizB;
         this.matrizPinv = matrizPinv;
+
         this.habilitadas = new boolean[cantT];
         this.cantT=cantT;
         this.cantP=cantP;
@@ -50,6 +51,12 @@ public class RdP {
             marcado[i]+=matrizW[i][transicion];
         }
         habilitacion();
+        if(chequeoInvP()){
+           System.out.println("ERROR");
+        }else{
+            System.out.println("NO ERROR");
+        }
+
     }
 
     public int getCantP() { return cantP; }
@@ -65,4 +72,21 @@ public class RdP {
     public int[][] getMatrizPinv() { return matrizPinv; }
 
     public boolean[] getHabilitadas() { return habilitadas; }
+
+    public boolean chequeoInvP(){
+        boolean error= false;
+        for (int i = 0; i < 10; i++) {
+            int tokens=0;
+            for (int j = 0; j < 18; j++) {
+                if(matrizPinv[i][j] == 1){
+                    tokens+=marcado[j];
+                }
+            }
+            if(tokens!=matrizPinv[i][18]){
+                error = true;
+                break;
+            }
+        }
+        return error;
+    }
 }

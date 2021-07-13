@@ -5,6 +5,7 @@ public class InvariantesT {
     }
 
     public void conteoTransiciones(int transicion,int linea){
+
         invT[linea] += "T"+transicion;
     }
 
