@@ -22,6 +22,17 @@ public class RdP {
 
     }
 
+    public boolean isHabilitada(int transicion) {
+        return habilitadas[transicion];
+    }
+
+    public void printMarcado(){
+        for (int i = 0; i < cantT; i++) {
+            System.out.print(marcado[i]);
+        }
+        System.out.print("\n");
+    }
+
     public void habilitacion() { // metodo para determinar que transcionciones estan habilitadas
         for (int i = 0; i < cantT; i++) {
             for (int j = 0; j < cantP; j++) {
@@ -41,31 +52,17 @@ public class RdP {
         habilitacion();
     }
 
-    public int getCantP() {
-        return cantP;
-    }
+    public int getCantP() { return cantP; }
 
-    public int getCantT() {
-        return cantT;
-    }
+    public int getCantT() { return cantT; }
 
-    public int[] getMarcado() {
-        return marcado;
-    }
+    public int[] getMarcado() { return marcado; }
 
-    public int[][] getMatrizW() {
-        return matrizW;
-    }
+    public int[][] getMatrizW() { return matrizW; }
 
-    public int[][] getMatrizB() {
-        return matrizB;
-    }
+    public int[][] getMatrizB() { return matrizB; }
 
-    public int[][] getMatrizPinv() {
-        return matrizPinv;
-    }
+    public int[][] getMatrizPinv() { return matrizPinv; }
 
-    public boolean[] getHabilitadas() {
-        return habilitadas;
-    }
+    public boolean[] getHabilitadas() { return habilitadas; }
 }

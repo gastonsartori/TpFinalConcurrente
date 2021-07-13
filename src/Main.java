@@ -12,26 +12,31 @@ public class Main {
                                 datos.crearMatriz("matrizB.xls",cantT,cantP),
                                 cantT,cantP);
 
+        Monitor monitor = new Monitor(RedDePetri);
 
-        for (int i = 0; i < cantP; i++) {
-            System.out.print(RedDePetri.getMarcado()[i]);
-        }
-        System.out.print("\n");
-        for (int i = 0; i < cantT; i++) {
-            System.out.print(RedDePetri.getHabilitadas()[i]);
+        InvariantesT inv = new InvariantesT();
+
+        Thread hilo1 = new Thread(new ThreadLinea1(monitor,RedDePetri,inv,0));
+        Thread hilo2 = new Thread(new ThreadLinea2(monitor,RedDePetri,inv,1));
+        Thread hilo3 = new Thread(new ThreadLinea3(monitor,RedDePetri,inv,2));
+        Thread hilo4 = new Thread(new ThreadLinea4(monitor,RedDePetri,inv,3));
+
+        hilo1.start();
+        hilo2.start();
+        hilo3.start();
+        hilo4.start();
+
+        try {
+            hilo1.join();
+            hilo2.join();
+            hilo3.join();
+            hilo4.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
         }
 
-        System.out.print("\n");
-        RedDePetri.disparo(0);
-        RedDePetri.disparo(0);
+        inv.printInvT();
 
-        for (int i = 0; i < cantP; i++) {
-            System.out.print(RedDePetri.getMarcado()[i]);
-        }
-        System.out.print("\n");
-        for (int i = 0; i < cantT; i++) {
-            System.out.print(RedDePetri.getHabilitadas()[i]);
-        }
 
     }
 }
