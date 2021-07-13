@@ -1,5 +1,3 @@
-import static java.lang.Thread.currentThread;
-
 public class ThreadLinea4 extends ThreadLinea {
 
     private int linea;
@@ -14,26 +12,23 @@ public class ThreadLinea4 extends ThreadLinea {
     @Override
     public void run() {
 
-        while(!(currentThread().isInterrupted())){
+        while(!terminar){
 
-            try {
-                dispararTransicion(4);  //TRANSICION 16
-                inv.conteoTransiciones(16, linea);
-                inv.logTransicion(16,linea);
+            dispararTransicion(4);  //TRANSICION 16
+            inv.conteoTransiciones(16, linea);
+            inv.logTransicion(16,linea);
 
-                dispararTransicion(5);  //TRANSICION 17
-                inv.conteoTransiciones(17, linea);
-                inv.logTransicion(17,linea);
+            dispararTransicion(5);  //TRANSICION 17
+            inv.conteoTransiciones(17, linea);
+            inv.logTransicion(17,linea);
 
-                dispararTransicion(6);  //TRANSICION 18
-                inv.conteoTransiciones(18, linea);
-                inv.logTransicion(18,linea);
+            dispararTransicion(6);  //TRANSICION 18
+            inv.conteoTransiciones(18, linea);
+            inv.logTransicion(18,linea);
 
-                monitor.incContador();
+            inv.incInv(linea);
+            monitor.incContador();
 
-            }catch(InterruptedException e){
-                return;
-            }
         }
     }
 }

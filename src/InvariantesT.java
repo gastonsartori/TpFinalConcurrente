@@ -1,7 +1,8 @@
 public class InvariantesT {
+
     private String[] invT= {"","","",""};
     private String invariantesT;
-    private int[] disparosInv= {0,0,0,0};
+    private int[] invCompletos= {0,0,0,0};
 
 
     public InvariantesT() {
@@ -15,7 +16,7 @@ public class InvariantesT {
 
     public synchronized void logTransicion(int transicion,int linea){
         invariantesT+="T"+transicion;
-        disparosInv[linea]++;
+
     }
 
     public String[] getInvT() {
@@ -34,8 +35,12 @@ public class InvariantesT {
 
     public void printCantDisparosInvT(){
         for (int i = 0; i < 4; i++) {
-            System.out.println(disparosInv[i]);
+            System.out.println(invCompletos[i]);
         }
+    }
+
+    public void incInv(int linea){
+        invCompletos[linea]++;
     }
 
 }

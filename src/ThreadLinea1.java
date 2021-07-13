@@ -11,26 +11,23 @@ public class ThreadLinea1 extends ThreadLinea {
     @Override
     public void run() {
 
-        while(!(currentThread().isInterrupted())){
+        while(!terminar){
 
-            try{
-                dispararTransicion(0);  //TRANSICION 1
-                inv.conteoTransiciones(1,linea);
-                inv.logTransicion(1,linea);
+            dispararTransicion(0);  //TRANSICION 1
+            inv.conteoTransiciones(1,linea);
+            inv.logTransicion(1,linea);
 
-                dispararTransicion(7);  //TRANSICION 2
-                inv.conteoTransiciones(2,linea);
-                inv.logTransicion(2,linea);
+            dispararTransicion(7);  //TRANSICION 2
+            inv.conteoTransiciones(2,linea);
+            inv.logTransicion(2,linea);
 
-                dispararTransicion(8);  //TRANSICION 3
-                inv.conteoTransiciones(3,linea);
-                inv.logTransicion(3,linea);
+            dispararTransicion(8);  //TRANSICION 3
+            inv.conteoTransiciones(3,linea);
+            inv.logTransicion(3,linea);
 
-                monitor.incContador();
+            inv.incInv(linea);
+            monitor.incContador();
 
-            }catch(InterruptedException e){
-                return;
-            }
         }
     }
 }

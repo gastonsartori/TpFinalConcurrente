@@ -27,19 +27,23 @@ public class Main {
 
         InvariantesT inv = new InvariantesT();
 
-        Thread[] hilos = new Thread[12];
+        ThreadLinea[] hilos = new ThreadLinea[12];
 
         for (int i = 0; i < 3; i++) {
             hilos[i]= new ThreadLinea1(monitor,RedDePetri,inv,0);
+            hilos[i].setName("linea1");
         }
         for (int i = 3; i < 6; i++) {
             hilos[i]= new ThreadLinea2(monitor,RedDePetri,inv,1);
+            hilos[i].setName("linea2");
         }
         for (int i = 6; i < 9; i++) {
             hilos[i]= new ThreadLinea3(monitor,RedDePetri,inv,2);
+            hilos[i].setName("linea3");
         }
         for (int i = 9; i < 12; i++) {
             hilos[i]= new ThreadLinea4(monitor,RedDePetri,inv,3);
+            hilos[i].setName("linea4");
         }
 
 
@@ -65,7 +69,7 @@ public class Main {
         //hilo4.fin();
 
         for (int i = 0; i < 12; i++) {
-            hilos[i].interrupt();
+            hilos[i].fin();
         }
 
         //hilo1.interrupt();
