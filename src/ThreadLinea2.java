@@ -15,16 +15,13 @@ public class ThreadLinea2 extends ThreadLinea {
 
         while(!terminar){
 
-            dispararTransicion(9);  //TRANSICION 4
-            inv.conteoTransiciones(4, linea);
+            dispararTransicion(9,linea);  //TRANSICION 4
             inv.logTransicion(4,linea);
 
-            dispararTransicion(10);  //TRANSICION 5
-            inv.conteoTransiciones(5, linea);
+            dispararTransicion(10,linea);  //TRANSICION 5
             inv.logTransicion(5,linea);
 
-            dispararTransicion(11);  //TRANSICION 6
-            inv.conteoTransiciones(6, linea);
+            dispararTransicion(11,linea);  //TRANSICION 6
             inv.logTransicion(6,linea);
 
             inv.incInv(linea);

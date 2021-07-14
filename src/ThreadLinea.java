@@ -12,8 +12,10 @@ public class ThreadLinea extends Thread{
         terminar=false;
     }
 
-    public void dispararTransicion(int transicion){
+    public void dispararTransicion(int transicion,int linea){
         monitor.disparar(transicion);
+        inv.incTransicion(linea);
+
     }
 
     public void fin(){

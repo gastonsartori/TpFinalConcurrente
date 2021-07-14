@@ -6,14 +6,16 @@ public class RdP {
     private int[][] matrizW;
     private int[][] matrizB;
     private int[][] matrizPinv;
+    private int[][] transicionesPorInv;
 
     private boolean[]   habilitadas;
 
-    public RdP(int[] marcado, int[][] matrizW, int[][] matrizB, int[][] matrizPinv, int cantT, int cantP) {
+    public RdP(int[] marcado, int[][] matrizW, int[][] matrizB, int[][] matrizPinv, int[][] transicionesPorInv, int cantT, int cantP) {
         this.marcado = marcado;
         this.matrizW = matrizW;
         this.matrizB = matrizB;
         this.matrizPinv = matrizPinv;
+        this.transicionesPorInv = transicionesPorInv;
 
         this.habilitadas = new boolean[cantT];
         this.cantT=cantT;
@@ -85,5 +87,9 @@ public class RdP {
             }
         }
         return error;
+    }
+
+    public int[][] getTransicionesPorInv() {
+        return transicionesPorInv;
     }
 }

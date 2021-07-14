@@ -14,19 +14,17 @@ public class ThreadLinea4 extends ThreadLinea {
 
         while(!terminar){
 
-            dispararTransicion(4);  //TRANSICION 16
-            inv.conteoTransiciones(16, linea);
+            dispararTransicion(4,linea);  //TRANSICION 16
             inv.logTransicion(16,linea);
 
-            dispararTransicion(5);  //TRANSICION 17
-            inv.conteoTransiciones(17, linea);
+            dispararTransicion(5,linea);  //TRANSICION 17
             inv.logTransicion(17,linea);
 
-            dispararTransicion(6);  //TRANSICION 18
-            inv.conteoTransiciones(18, linea);
+            dispararTransicion(6,linea);  //TRANSICION 18
             inv.logTransicion(18,linea);
 
             inv.incInv(linea);
+
             monitor.incContador();
 
         }

@@ -11,21 +11,24 @@ public class Main {
                                 datos.crearMatriz("matrizW.xls",cantT,cantP),
                                 datos.crearMatriz("matrizB.xls",cantT,cantP),
                                 datos.crearMatriz("pruebaInvP.xls",19,10),
+                                datos.crearMatriz("transicionesPorInv.xls",3,4),
                                 cantT,cantP);
+
         /*
-        for (int i = 0; i < 10; i++) {
-            for (int j = 0; j < 19; j++) {
-                System.out.print(RedDePetri.getMatrizPinv()[i][j]);
+        for (int i = 0; i < 4; i++) {
+            for (int j = 0; j < 3; j++) {
+                System.out.print(RedDePetri.getTransicionesPorInv()[i][j]);
             }
             System.out.println("\n");
         }
+        */
 
-         */
-
-
-        Monitor monitor = new Monitor(RedDePetri);
 
         InvariantesT inv = new InvariantesT();
+
+        Politica politica= new Politica(inv,RedDePetri);
+
+        Monitor monitor = new Monitor(RedDePetri, politica);
 
         ThreadLinea[] hilos = new ThreadLinea[12];
 
@@ -45,7 +48,6 @@ public class Main {
             hilos[i]= new ThreadLinea4(monitor,RedDePetri,inv,3);
             hilos[i].setName("linea4");
         }
-
 
         //Thread hilo2 = new Thread(new ThreadLinea2(monitor,RedDePetri,inv,1));
         //Thread hilo3 = new Thread(new ThreadLinea3(monitor,RedDePetri,inv,2));
@@ -72,14 +74,26 @@ public class Main {
             hilos[i].fin();
         }
 
+        monitor.finalizar();
+
+        for (int i = 0; i < 12; i++) {
+            try {
+                hilos[i].join();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+
         //hilo1.interrupt();
         //hilo2.interrupt();
         //hilo3.interrupt();
         //hilo4.interrupt();
 
-        inv.printInvT();
-        inv.printCantDisparosInvT();
+        inv.printCantInvTCompletos();
+        inv.printCantTransicionesInv();
         //System.out.println(inv.getInvariantesT());
+
+
 
     }
 }

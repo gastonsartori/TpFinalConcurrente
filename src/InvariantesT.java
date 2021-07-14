@@ -1,46 +1,46 @@
 public class InvariantesT {
 
-    private String[] invT= {"","","",""};
-    private String invariantesT;
+    private String transiciones;
     private int[] invCompletos= {0,0,0,0};
-
+    private int[] transicionesInv= {0,0,0,0};
 
     public InvariantesT() {
-        invariantesT=new String();
-    }
-
-    public void conteoTransiciones(int transicion,int linea){
-
-        invT[linea] += "T"+transicion;
+        transiciones =new String();
     }
 
     public synchronized void logTransicion(int transicion,int linea){
-        invariantesT+="T"+transicion;
-
+        transiciones +="T"+transicion;
     }
 
-    public String[] getInvT() {
-        return invT;
+    public String getTransiciones() {
+        return transiciones;
     }
 
-    public String getInvariantesT() {
-        return invariantesT;
-    }
-
-    public void printInvT(){
+    public void printCantInvTCompletos(){
         for (int i = 0; i < 4; i++) {
-            System.out.println(invT[i]);
+            System.out.println("Cantidad de invariantes completos en linea " + (i+1) + " :" + invCompletos[i]);
         }
     }
 
-    public void printCantDisparosInvT(){
+    public void printCantTransicionesInv(){
         for (int i = 0; i < 4; i++) {
-            System.out.println(invCompletos[i]);
+            System.out.println("Cantidad de transiciones disparadas en linea " + (i+1) + " :" + transicionesInv[i]);
         }
     }
 
-    public void incInv(int linea){
+    public synchronized void incInv(int linea){
         invCompletos[linea]++;
     }
 
+    public synchronized void incTransicion(int linea){
+        transicionesInv[linea]++;
+    }
+
+    public int[] getInvCompletos() {
+        return invCompletos;
+    }
+
+    public int[] getTransicionesInv() {
+        return transicionesInv;
+    }
 }
