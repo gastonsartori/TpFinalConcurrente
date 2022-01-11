@@ -1,17 +1,17 @@
 public class Main {
 
-    private static int cantP = 18;
-    private static int cantT = 12;
+    private static int cantP = 18;  //cantidad de plazas de la red
+    private static int cantT = 12;  //cantidad de transiciones de la red
 
     public static void main(String[] args) {
 
         Datos datos=new Datos();
 
-        RdP RedDePetri=new RdP(datos.crearMarcado("marcado.xls",cantP),
-                                datos.crearMatriz("matrizW.xls",cantT,cantP),
-                                datos.crearMatriz("matrizB.xls",cantT,cantP),
-                                datos.crearMatriz("pruebaInvP.xls",19,10),
-                                datos.crearMatriz("transicionesPorInv.xls",3,4),
+        RdP RedDePetri=new RdP(datos.crearMarcado("marcado.xls",cantP), //marcad inicial de la red
+                                datos.crearMatriz("matrizW.xls",cantT,cantP), //matriz de incidencia conmbinada
+                                datos.crearMatriz("matrizB.xls",cantT,cantP), //matriz de incidencia negativa
+                                datos.crearMatriz("pruebaInvP.xls",19,10), //invariantes de plaza
+                                datos.crearMatriz("transicionesPorInv.xls",3,4), //invariantes de transicion
                                 cantT,cantP);
 
         /*
@@ -61,6 +61,8 @@ public class Main {
         // hilo3.start();
         //hilo4.start();
 
+
+
         while(monitor.getContador()<1000){
             System.out.print("");
         }
@@ -90,10 +92,8 @@ public class Main {
         //hilo4.interrupt();
 
         inv.printCantInvTCompletos();
-        inv.printCantTransicionesInv();
+        //inv.printCantTransicionesInv();
         //System.out.println(inv.getInvariantesT());
-
-
 
     }
 }

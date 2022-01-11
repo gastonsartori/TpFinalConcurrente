@@ -2,13 +2,13 @@
 public class RdP {
 
     int cantP, cantT;
-    private int[]   marcado;
-    private int[][] matrizW;
-    private int[][] matrizB;
-    private int[][] matrizPinv;
-    private int[][] transicionesPorInv;
+    private int[]   marcado; //almacenara el estado actual de la red en to do momento
+    private int[][] matrizW; //topologia de la red - incidencia combinada
+    private int[][] matrizB; //topologia de la red - incidencia negativa
+    private int[][] matrizPinv; //invariantes de plaza
+    private int[][] transicionesPorInv; //invariantes de transicion
 
-    private boolean[]   habilitadas;
+    private boolean[]   habilitadas; //almacena que transiciones se encuentran habilitadas en ese momento
 
     public RdP(int[] marcado, int[][] matrizW, int[][] matrizB, int[][] matrizPinv, int[][] transicionesPorInv, int cantT, int cantP) {
         this.marcado = marcado;
@@ -24,6 +24,12 @@ public class RdP {
         habilitacion();
 
     }
+
+    /**
+     *
+     * @param transicion
+     * @return estado de habilitacion de la transicion
+     */
 
     public boolean isHabilitada(int transicion) {
         return habilitadas[transicion];
@@ -48,6 +54,12 @@ public class RdP {
         }
     }
 
+    /**
+     * suma elemento a elemento, el marcado con la columna de la matriz de incidencia determinada por la transicion a disparar
+     * se calcula nuevament las transiciones habilitadas
+     * se chequean los invariantes de plazas
+     * @param transicion
+     */
     public void disparo(int transicion){
         for (int i = 0; i < cantP; i++) {
             marcado[i]+=matrizW[i][transicion];
@@ -72,16 +84,23 @@ public class RdP {
 
     public boolean[] getHabilitadas() { return habilitadas; }
 
+    /**
+     * luego de cada transicion, se chequean los inv de plazas.
+     * recorre cada inv de plazas, acumula los tokens de las plazas que pertenecen a cada invariante
+     * al finalizar, esto debe ser igual a lo determinado por la matriz de chequeo
+     * @return
+     */
+
     public boolean chequeoInvP(){
         boolean error= false;
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < 10; i++) { //recorro cada fila de la matriz de chequeo
             int tokens=0;
-            for (int j = 0; j < 18; j++) {
-                if(matrizPinv[i][j] == 1){
-                    tokens+=marcado[j];
+            for (int j = 0; j < 18; j++) { //recorro cada elemento de la fila
+                if(matrizPinv[i][j] == 1){ //si hay un 1, esa plaza pertnece a ese invariante
+                    tokens+=marcado[j]; //se acumulan los tokens de esa plaza
                 }
             }
-            if(tokens!=matrizPinv[i][18]){
+            if(tokens!=matrizPinv[i][18]){ //al final, la acumulacion debe ser igual al invariante
                 error = true;
                 break;
             }

@@ -11,10 +11,10 @@ public class ThreadLinea1 extends ThreadLinea {
     @Override
     public void run() {
 
-        while(!terminar){
+        while(!terminar){ //se cheque la bandera de finalizacion antes de comnezar un nuevo invariante
 
             dispararTransicion(0,linea);  //TRANSICION 1
-            inv.logTransicion(1,linea);
+            inv.logTransicion(1,linea);   //luego de disparar, la contabiliza
 
             dispararTransicion(7,linea);  //TRANSICION 2
             inv.logTransicion(2,linea);
@@ -22,8 +22,8 @@ public class ThreadLinea1 extends ThreadLinea {
             dispararTransicion(8,linea);  //TRANSICION 3
             inv.logTransicion(3,linea);
 
-            inv.incInv(linea);
-            monitor.incContador();
+            inv.incInv(linea); //al finalizar un inv, suma a los inv completados
+            monitor.incContador(); //
 
         }
     }

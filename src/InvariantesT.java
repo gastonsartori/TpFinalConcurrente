@@ -1,8 +1,8 @@
-public class InvariantesT {
+public class InvariantesT { //se encarga de la informacion de transciones disparadas y invariantes completados
 
-    private String transiciones;
-    private int[] invCompletos= {0,0,0,0};
-    private int[] transicionesInv= {0,0,0,0};
+    private String transiciones; //linea con las transiciones ejecutadas
+    private int[] invCompletos= {0,0,0,0}; //almacena la cant de invariantes completos de cada uno
+    private int[] transicionesInv= {0,0,0,0}; //almacena la cant de transiciones disparadas en cada invariante
 
     public InvariantesT() {
         transiciones =new String();
@@ -27,6 +27,8 @@ public class InvariantesT {
             System.out.println("Cantidad de transiciones disparadas en linea " + (i+1) + " :" + transicionesInv[i]);
         }
     }
+
+    //TODO: MEJORAR SINCRONIZACION DE LOS METODOS
 
     public synchronized void incInv(int linea){
         invCompletos[linea]++;
