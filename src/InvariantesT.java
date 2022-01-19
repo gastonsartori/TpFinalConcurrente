@@ -9,7 +9,7 @@ public class InvariantesT { //se encarga de la informacion de transciones dispar
     }
 
     public synchronized void logTransicion(int transicion,int linea){
-        transiciones +="T"+transicion;
+        transiciones +="T"+transicion+"-";
     }
 
     public String getTransiciones() {
@@ -45,4 +45,6 @@ public class InvariantesT { //se encarga de la informacion de transciones dispar
     public int[] getTransicionesInv() {
         return transicionesInv;
     }
+
+
 }

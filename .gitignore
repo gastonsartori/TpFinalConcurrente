@@ -1,2 +1,5 @@
 
 *.xml
+out/production/TP/Main.class
+out/production/TP/Log.class
+*.class

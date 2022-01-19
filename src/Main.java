@@ -93,7 +93,12 @@ public class Main {
 
         inv.printCantInvTCompletos();
         //inv.printCantTransicionesInv();
-        //System.out.println(inv.getInvariantesT());
+        System.out.println(inv.getTransiciones());
+
+        Log logger = new Log();
+
+        logger.logTransiciones(inv.getTransiciones());
+
 
     }
 }
