@@ -3,6 +3,7 @@ public class InvariantesT { //se encarga de la informacion de transciones dispar
     private String transiciones; //linea con las transiciones ejecutadas
     private int[] invCompletos= {0,0,0,0}; //almacena la cant de invariantes completos de cada uno
     private int[] transicionesInv= {0,0,0,0}; //almacena la cant de transiciones disparadas en cada invariante
+    private int[] invTr= new int[]{0, 2, 2, 2, 3, 3, 3, 0, 0, 1, 1, 1};
 
     public InvariantesT() {
         transiciones =new String();
@@ -40,6 +41,13 @@ public class InvariantesT { //se encarga de la informacion de transciones dispar
 
     public int[] getInvCompletos() {
         return invCompletos;
+    }
+
+    public int getCantInvCompletos(int invariante){
+        return invCompletos[invariante];
+    }
+    public int getCantInvCompletosTr(int transicion){
+        return invCompletos[invTr[transicion]];
     }
 
     public int[] getTransicionesInv() {

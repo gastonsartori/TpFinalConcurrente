@@ -15,12 +15,15 @@ public class ThreadLinea1 extends ThreadLinea {
 
             dispararTransicion(0,linea);  //TRANSICION 1
             inv.logTransicion(1,linea);   //luego de disparar, la contabiliza
+            //System.out.println("T1");
 
             dispararTransicion(7,linea);  //TRANSICION 2
             inv.logTransicion(2,linea);
+            //System.out.println("T2");
 
             dispararTransicion(8,linea);  //TRANSICION 3
             inv.logTransicion(3,linea);
+            //System.out.println("T3");
 
             inv.incInv(linea); //al finalizar un inv, suma a los inv completados
             monitor.incContador(); //

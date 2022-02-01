@@ -1,3 +1,5 @@
+import java.util.ArrayList;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.ReentrantLock;
 
@@ -9,6 +11,7 @@ public class Monitor {
     private Condition espera2;
     private Condition espera3;
     private Condition espera4;
+    private Condition espera_temporales;
     private boolean finalizo;
     private Politica politica;
     private Condition[] colas;
@@ -18,11 +21,18 @@ public class Monitor {
     public Monitor(RdP redDePetri,Politica politica) {
         RedDePetri = redDePetri;
         mutex = new ReentrantLock();
-        espera1=mutex.newCondition();
-        espera2=mutex.newCondition();
-        espera3=mutex.newCondition();
-        espera4=mutex.newCondition();
-        colas= new Condition[]{espera1, espera2, espera3, espera4};
+        //espera1=mutex.newCondition();
+        //espera2=mutex.newCondition();
+        //espera3=mutex.newCondition();
+        //espera4=mutex.newCondition();
+        espera_temporales=mutex.newCondition();
+        colas=new Condition[Main.getCantT()];
+
+        //colas= new Condition[]{espera1, espera2, espera3, espera4};
+        for (int i = 0; i < colas.length; i++) {
+            colas[i]=mutex.newCondition();
+        }
+
         this.politica=politica;
         finalizo=false;
     }
@@ -31,25 +41,49 @@ public class Monitor {
         try {
             mutex.lock();
 
+            //System.out.println(transicion);
+
             while (!(RedDePetri.isHabilitada(transicion))) { //si la transicion deseada no esta habilitada
-                //el hilo ejecutar despertar y espera en la cola de su invaraiante
-                if(Thread.currentThread().getName()=="linea1"){
+
+                if(RedDePetri.esTemporal(transicion) && RedDePetri.getTiempoDeSensibilizacion(transicion) !=0){
+
+                    long tiempoActual = System.currentTimeMillis();
+                    long intervalo = RedDePetri.getTiempoDeTransicion(transicion) - (tiempoActual - RedDePetri.getTiempoDeSensibilizacion(transicion));
+                    //System.out.println(intervalo+"="+tiempoActual+"-"+RedDePetri.getTiempoDeSensibilizacion(transicion));
+
+                    //System.out.println("me wa mimir por" + intervalo + Thread.currentThread().getName());
+                    espera_temporales.await(intervalo, TimeUnit.MILLISECONDS);
+                    //System.out.println("me desperte"+ Thread.currentThread().getName());
+                    RedDePetri.habilitacion();
+                    //TODO: revisar la habilitacion de las temporales, se clava
+
+                }else{
+
                     despertar();
-                    espera1.await();
-                    //System.out.println("espera1");
-                }else if (Thread.currentThread().getName()=="linea2"){
-                    despertar();
-                    espera2.await();
-                    //System.out.println("espera2");
-                }else if (Thread.currentThread().getName()=="linea3"){
-                    despertar();
-                    espera3.await();
-                    //System.out.println("espera3");
-                }else if (Thread.currentThread().getName()=="linea4"){
-                    despertar();
-                    espera4.await();
-                    //System.out.println("espera4");
+                    colas[transicion].await();
+                    //RedDePetri.habilitacion();
+
+                    /*
+                    if(Thread.currentThread().getName()=="linea1"){
+                        //System.out.println("espera1");
+                        despertar();
+                        espera1.await();
+                    }else if (Thread.currentThread().getName()=="linea2"){
+                        //System.out.println("espera2");
+                        despertar();
+                        espera2.await();
+                    }else if (Thread.currentThread().getName()=="linea3"){
+                        //System.out.println("espera3");
+                        despertar();
+                        espera3.await();
+                    }else if (Thread.currentThread().getName()=="linea4"){
+                        //System.out.println("espera4");
+                        despertar();
+                        espera4.await();
+                    }
+                    */
                 }
+                //el hilo ejecutar despertar y espera en la cola de su invaraiante
             }
 
             RedDePetri.disparo(transicion); // si estaba habilitada, se dispara la transicion
@@ -71,26 +105,50 @@ public class Monitor {
         return contador;
     }
 
+    public Condition[] getColas() {
+        return colas;
+    }
+
     public void finalizar(){
         finalizo=true;
     }
 
     public void despertar(){
-
+        //System.out.println("despertar");
         if(!finalizo){ //si ya se finalizo, no se tiene en cuenta la politica
-            boolean[] invariantes = politica.determinarInv(); //la politica determina que invaraintes pueden ser ejecutados
+            ArrayList<Integer> despertarTr = politica.determinarTr(); //la politica determina que invaraintes pueden ser ejecutados
+            boolean desperte=false;
 
-            for (int i = 0; i < 4; i++) {
-                if(invariantes[i]){
-                    colas[i].signalAll(); //despertar a todos los hilos de los invariantes que puedan ser ejectuados
+            for (int i = 0; i < despertarTr.size(); i++) {
+                if(mutex.hasWaiters(colas[despertarTr.get(i)])){
+                    //System.out.println("despertar" + i);
+                    colas[despertarTr.get(i)].signalAll();
+                    desperte=true;
+                    break;
                 }
             }
 
+            /*if(!desperte && !mutex.hasWaiters(espera_temporales)){
+                for (int i = 0; i < RedDePetri.cantT; i++) {
+                    if(RedDePetri.getTiempoDeTransicion(i) != 0){
+                        System.out.println("desperte pq no habia nadie " + i);
+                        colas[i].signalAll();
+                    }
+                }
+            }*/
+
+            //TODO: a partir de lo devuelto por la politica, despertar de las colas de cada transicion
+            /*for (int i = 0; i < 4; i++) {
+                if(invariantes[i]){
+                    System.out.println(i);
+                    colas[i].signalAll(); //despertar a todos los hilos de los invariantes que puedan ser ejectuados
+                }
+            }*/
+
         }else {
-            espera1.signalAll();
-            espera2.signalAll();
-            espera3.signalAll();
-            espera4.signalAll();
+            for (int i = 0; i < Main.getCantT(); i++) {
+                colas[i].signalAll();
+            }
         }
     }
 }
