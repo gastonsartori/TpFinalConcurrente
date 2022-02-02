@@ -18,8 +18,12 @@ public class InvariantesT { //se encarga de la informacion de transciones dispar
     }
 
     public void printCantInvTCompletos(){
+        Log log = new Log();
+        log.logInvariantes("------------------------------------------------------------------------------");
+
         for (int i = 0; i < 4; i++) {
-            System.out.println("Cantidad de invariantes completos en linea " + (i+1) + " :" + invCompletos[i]);
+//            System.out.println("Cantidad de invariantes completos en linea " + (i+1) + " :" + invCompletos[i]);
+            log.logInvariantes("Cantidad de invariantes completos en linea " + (i+1) + ":" + invCompletos[i]);
         }
     }
 
