@@ -69,12 +69,12 @@ public class Main {
         long tiempoInicial = System.currentTimeMillis();
 
         while(monitor.getContador()<1000){
-            /*try {
+            try {
                 Thread.sleep(20);
                 inv.printCantInvTCompletos();
             } catch (InterruptedException e) {
                 e.printStackTrace();
-            }*/
+            }
         }
         long tiempoFinal = System.currentTimeMillis();
 
@@ -94,11 +94,11 @@ public class Main {
 
         long tiempoEjecucion = tiempoFinal - tiempoInicial;
 
-        System.out.println(tiempoEjecucion);
-
         inv.printCantInvTCompletos(logger);
         inv.printCantInvTCompletos();
         System.out.println(inv.getTransiciones());
+
+        System.out.println("Tiempo de ejecucion: " + tiempoEjecucion + "ms");
         logger.logTransiciones(inv.getTransiciones());
 
     }
