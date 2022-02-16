@@ -40,8 +40,8 @@ public class Monitor {
     public void disparar(int transicion){ //ejecuado por cada hilo que quiera disparar una transicion
         try {
             mutex.lock();
-
-            //System.out.println(transicion);
+            System.out.println("entrada=" + System.currentTimeMillis());
+            System.out.println(transicion);
 
             while (!(RedDePetri.isHabilitada(transicion))) { //si la transicion deseada no esta habilitada
 
@@ -49,18 +49,25 @@ public class Monitor {
 
                     long tiempoActual = System.currentTimeMillis();
                     long intervalo = RedDePetri.getTiempoDeTransicion(transicion) - (tiempoActual - RedDePetri.getTiempoDeSensibilizacion(transicion));
-                    //System.out.println(intervalo+"="+tiempoActual+"-"+RedDePetri.getTiempoDeSensibilizacion(transicion));
-
-                    //System.out.println("me wa mimir por" + intervalo + Thread.currentThread().getName());
-                    espera_temporales.await(intervalo, TimeUnit.MILLISECONDS);
-                    //System.out.println("me desperte"+ Thread.currentThread().getName());
+                    System.out.println(intervalo+"="+RedDePetri.getTiempoDeTransicion(transicion)+"-"+ tiempoActual+"-"+ RedDePetri.getTiempoDeSensibilizacion(transicion));
+                    if(intervalo > 0) {
+                        despertar();
+                        System.out.println("me wa mimir por" + intervalo + Thread.currentThread().getName() + "desde" + System.currentTimeMillis());
+                        espera_temporales.await(100, TimeUnit.MILLISECONDS);
+                        System.out.println("me desperte" + Thread.currentThread().getName() + "a los" + System.currentTimeMillis());
+                        System.out.println(System.currentTimeMillis());
+                    }
                     RedDePetri.habilitacion();
+                    System.out.println(System.currentTimeMillis());
                     //TODO: revisar la habilitacion de las temporales, se clava
 
                 }else{
 
                     despertar();
+                    System.out.print("a esperar no tengo tokens ");
+                    System.out.println(System.currentTimeMillis());
                     colas[transicion].await();
+                    System.out.println("desperte de tokerns " + transicion);
                     //RedDePetri.habilitacion();
 
                     /*
@@ -87,12 +94,17 @@ public class Monitor {
             }
 
             RedDePetri.disparo(transicion); // si estaba habilitada, se dispara la transicion
+            //RedDePetri.printTiempos();
+            System.out.println("disparo: " + System.currentTimeMillis());
 
             despertar(); //antes de salir del monitor, despierta a los demas hilos
+
+            System.out.println("desperte: " + System.currentTimeMillis());
 
         } catch (InterruptedException e) {
             e.printStackTrace();
         } finally {
+            System.out.println("salida=" + System.currentTimeMillis());
             mutex.unlock(); //libera el lock
         }
     }
@@ -128,6 +140,12 @@ public class Monitor {
                 }
             }
 
+            for (int i = 0; i < RedDePetri.cantT; i++) {
+                if(RedDePetri.esTemporal(i) && mutex.hasWaiters(colas[i]) && !mutex.hasWaiters(espera_temporales)){
+                    colas[i].signalAll();
+                }
+            }
+
             /*if(!desperte && !mutex.hasWaiters(espera_temporales)){
                 for (int i = 0; i < RedDePetri.cantT; i++) {
                     if(RedDePetri.getTiempoDeTransicion(i) != 0){
@@ -137,7 +155,6 @@ public class Monitor {
                 }
             }*/
 
-            //TODO: a partir de lo devuelto por la politica, despertar de las colas de cada transicion
             /*for (int i = 0; i < 4; i++) {
                 if(invariantes[i]){
                     System.out.println(i);

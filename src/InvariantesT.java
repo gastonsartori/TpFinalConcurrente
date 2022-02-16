@@ -13,17 +13,22 @@ public class InvariantesT { //se encarga de la informacion de transciones dispar
         transiciones +="T"+transicion+"-";
     }
 
-    public String getTransiciones() {
-        return transiciones;
+    public String getTransiciones() {return transiciones;}
+
+    public void printCantInvTCompletos(Log log){
+        log.logInvariantes("------------------------------------------------------------------------------");
+
+
+        for (int i = 0; i < 4; i++) {
+            //System.out.println("Cantidad de invariantes completos en linea " + (i+1) + " :" + invCompletos[i]);
+            log.logInvariantes("Cantidad de invariantes completos en linea " + (i+1) + ":" + invCompletos[i]);
+        }
     }
 
     public void printCantInvTCompletos(){
-        Log log = new Log();
-        log.logInvariantes("------------------------------------------------------------------------------");
-
+        System.out.println("------------------------------------------------------------------------------");
         for (int i = 0; i < 4; i++) {
-//            System.out.println("Cantidad de invariantes completos en linea " + (i+1) + " :" + invCompletos[i]);
-            log.logInvariantes("Cantidad de invariantes completos en linea " + (i+1) + ":" + invCompletos[i]);
+            System.out.println("Cantidad de invariantes completos en linea " + (i+1) + " :" + invCompletos[i]);
         }
     }
 
@@ -38,7 +43,6 @@ public class InvariantesT { //se encarga de la informacion de transciones dispar
     public synchronized void incInv(int linea){
         invCompletos[linea]++;
     }
-
     public synchronized void incTransicion(int linea){
         transicionesInv[linea]++;
     }
@@ -46,14 +50,10 @@ public class InvariantesT { //se encarga de la informacion de transciones dispar
     public int[] getInvCompletos() {
         return invCompletos;
     }
-
     public int getCantInvCompletos(int invariante){
         return invCompletos[invariante];
     }
-    public int getCantInvCompletosTr(int transicion){
-        return invCompletos[invTr[transicion]];
-    }
-
+    public int getCantInvCompletosTr(int transicion){ return invCompletos[invTr[transicion]];}
     public int[] getTransicionesInv() {
         return transicionesInv;
     }

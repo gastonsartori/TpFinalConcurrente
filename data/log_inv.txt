@@ -1,0 +1,105 @@
+------------------------------------------------------------------------------
+Cantidad de invariantes completos en linea 1:243
+Cantidad de invariantes completos en linea 2:263
+Cantidad de invariantes completos en linea 3:241
+Cantidad de invariantes completos en linea 4:265
+------------------------------------------------------------------------------
+Cantidad de invariantes completos en linea 1:242
+Cantidad de invariantes completos en linea 2:265
+Cantidad de invariantes completos en linea 3:241
+Cantidad de invariantes completos en linea 4:264
+------------------------------------------------------------------------------
+Cantidad de invariantes completos en linea 1:242
+Cantidad de invariantes completos en linea 2:264
+Cantidad de invariantes completos en linea 3:241
+Cantidad de invariantes completos en linea 4:265
+------------------------------------------------------------------------------
+Cantidad de invariantes completos en linea 1:241
+Cantidad de invariantes completos en linea 2:265
+Cantidad de invariantes completos en linea 3:242
+Cantidad de invariantes completos en linea 4:264
+------------------------------------------------------------------------------
+Cantidad de invariantes completos en linea 1:243
+Cantidad de invariantes completos en linea 2:263
+Cantidad de invariantes completos en linea 3:240
+Cantidad de invariantes completos en linea 4:266
+------------------------------------------------------------------------------
+Cantidad de invariantes completos en linea 1:242
+Cantidad de invariantes completos en linea 2:267
+Cantidad de invariantes completos en linea 3:244
+Cantidad de invariantes completos en linea 4:266
+------------------------------------------------------------------------------
+Cantidad de invariantes completos en linea 1:244
+Cantidad de invariantes completos en linea 2:263
+Cantidad de invariantes completos en linea 3:240
+Cantidad de invariantes completos en linea 4:266
+------------------------------------------------------------------------------
+Cantidad de invariantes completos en linea 1:243
+Cantidad de invariantes completos en linea 2:267
+Cantidad de invariantes completos en linea 3:245
+Cantidad de invariantes completos en linea 4:268
+------------------------------------------------------------------------------
+Cantidad de invariantes completos en linea 1:242
+Cantidad de invariantes completos en linea 2:267
+Cantidad de invariantes completos en linea 3:242
+Cantidad de invariantes completos en linea 4:267
+------------------------------------------------------------------------------
+Cantidad de invariantes completos en linea 1:244
+Cantidad de invariantes completos en linea 2:268
+Cantidad de invariantes completos en linea 3:245
+Cantidad de invariantes completos en linea 4:267
+------------------------------------------------------------------------------
+Cantidad de invariantes completos en linea 1:241
+Cantidad de invariantes completos en linea 2:265
+Cantidad de invariantes completos en linea 3:243
+Cantidad de invariantes completos en linea 4:266
+------------------------------------------------------------------------------
+Cantidad de invariantes completos en linea 1:241
+Cantidad de invariantes completos en linea 2:265
+Cantidad de invariantes completos en linea 3:242
+Cantidad de invariantes completos en linea 4:264
+------------------------------------------------------------------------------
+Cantidad de invariantes completos en linea 1:244
+Cantidad de invariantes completos en linea 2:266
+Cantidad de invariantes completos en linea 3:243
+Cantidad de invariantes completos en linea 4:269
+------------------------------------------------------------------------------
+Cantidad de invariantes completos en linea 1:241
+Cantidad de invariantes completos en linea 2:265
+Cantidad de invariantes completos en linea 3:242
+Cantidad de invariantes completos en linea 4:264
+------------------------------------------------------------------------------
+Cantidad de invariantes completos en linea 1:243
+Cantidad de invariantes completos en linea 2:263
+Cantidad de invariantes completos en linea 3:240
+Cantidad de invariantes completos en linea 4:266
+------------------------------------------------------------------------------
+Cantidad de invariantes completos en linea 1:242
+Cantidad de invariantes completos en linea 2:263
+Cantidad de invariantes completos en linea 3:240
+Cantidad de invariantes completos en linea 4:267
+------------------------------------------------------------------------------
+Cantidad de invariantes completos en linea 1:122
+Cantidad de invariantes completos en linea 2:134
+Cantidad de invariantes completos en linea 3:122
+Cantidad de invariantes completos en linea 4:134
+------------------------------------------------------------------------------
+Cantidad de invariantes completos en linea 1:121
+Cantidad de invariantes completos en linea 2:135
+Cantidad de invariantes completos en linea 3:124
+Cantidad de invariantes completos en linea 4:132
+------------------------------------------------------------------------------
+Cantidad de invariantes completos en linea 1:121
+Cantidad de invariantes completos en linea 2:136
+Cantidad de invariantes completos en linea 3:124
+Cantidad de invariantes completos en linea 4:131
+------------------------------------------------------------------------------
+Cantidad de invariantes completos en linea 1:122
+Cantidad de invariantes completos en linea 2:132
+Cantidad de invariantes completos en linea 3:121
+Cantidad de invariantes completos en linea 4:137
+------------------------------------------------------------------------------
+Cantidad de invariantes completos en linea 1:239
+Cantidad de invariantes completos en linea 2:267
+Cantidad de invariantes completos en linea 3:245
+Cantidad de invariantes completos en linea 4:261

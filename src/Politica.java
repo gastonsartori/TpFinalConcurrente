@@ -69,7 +69,7 @@ public class Politica {
             for (int i = 0; i < conflictos[transicion].length; i++) {
                 int trConflictiva = conflictos[transicion][i];
                 if(RedDePetri.getTiempoDeSensibilizacion(trConflictiva) != 0){
-                    if(inv.getCantInvCompletosTr(trConflictiva) > inv.getCantInvCompletosTr(transicion)*1.1){
+                    if(inv.getCantInvCompletosTr(trConflictiva) > inv.getCantInvCompletosTr(transicion)*(1+Main.getPorcentajeDePrioridadNoTemporales())){
                         habilitar=true;
                     }else{
                         habilitar= false;

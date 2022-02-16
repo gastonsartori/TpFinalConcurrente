@@ -130,6 +130,7 @@ public class RdP {
         habilitacion();
         if(chequeoInvP()){
            System.out.println("ERROR");
+           System.exit(1);
         }
     }
 
@@ -203,8 +204,10 @@ public class RdP {
 
         //System.out.println(intervalo);
 
-        if( transicionesTemporales[transicion] <= intervalo )	// Si se cumplio el tiempo para ser habilitada
+        if( transicionesTemporales[transicion] < intervalo ){	// Si se cumplio el tiempo para ser habilitada
+            //System.out.println("finalizado");
             return true;
+        }
 
         return false;
     }

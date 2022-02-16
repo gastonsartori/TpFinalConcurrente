@@ -3,24 +3,31 @@ public class Main {
     private static int cantP = 18;  //cantidad de plazas de la red
     private static int cantT = 12;  //cantidad de transiciones de la red
     private static int cantHilos =12;
+    private static float porcentajeDePrioridadNoTemporales = (float) 0.1;
+    private static Datos datos;
+    private static RdP RedDePetri;
+    private static InvariantesT inv;
+    private static Politica politica;
+    private static Monitor monitor;
+    private static ThreadLinea[] hilos;
+    private static Log logger;
 
     public static int getCantP() {
         return cantP;
     }
-
     public static int getCantT() {
         return cantT;
     }
-
     public static int getCantHilos() {
         return cantHilos;
     }
+    public static float getPorcentajeDePrioridadNoTemporales() {return porcentajeDePrioridadNoTemporales;}
 
     public static void main(String[] args) {
 
-        Datos datos=new Datos();
+        datos=new Datos();
 
-        RdP RedDePetri=new RdP(datos.crearMarcado("marcado.xls",cantP), //marcad inicial de la red
+        RedDePetri=new RdP(datos.crearMarcado("marcado.xls",cantP), //marcad inicial de la red
                                 datos.crearMatriz("matrizW.xls",cantT,cantP), //matriz de incidencia conmbinada
                                 datos.crearMatriz("matrizB.xls",cantT,cantP), //matriz de incidencia negativa
                                 datos.crearMatriz("pruebaInvP.xls",19,10), //invariantes de plaza
@@ -28,28 +35,15 @@ public class Main {
                                 datos.crearMarcado("tiempoTransiciones.xls",cantT),
                                 cantT,cantP);
 
-        /*
-        for (int i = 0; i < 4; i++) {
-            for (int j = 0; j < 3; j++) {
-                System.out.print(RedDePetri.getTransicionesPorInv()[i][j]);
-            }
-            System.out.println("\n");
-        }
-        */
+        inv = new InvariantesT();
 
-        RedDePetri.printMarcado();
-        //RedDePetri.printTemporales();
-        RedDePetri.printTiempos();
-        //RedDePetri.printB();
-        RedDePetri.printHabilitadas();
+        politica= new Politica(inv,RedDePetri);
 
-        InvariantesT inv = new InvariantesT();
+        monitor = new Monitor(RedDePetri, politica);
 
-        Politica politica= new Politica(inv,RedDePetri);
+        hilos = new ThreadLinea[cantHilos];
 
-        Monitor monitor = new Monitor(RedDePetri, politica);
-
-        ThreadLinea[] hilos = new ThreadLinea[cantHilos];
+        logger = new Log();
 
         for (int i = 0; i < cantHilos/4; i++) {
             hilos[i]= new ThreadLinea1(monitor,RedDePetri,inv,0);
@@ -68,30 +62,25 @@ public class Main {
             hilos[i].setName("linea4");
         }
 
-        //Thread hilo2 = new Thread(new ThreadLinea2(monitor,RedDePetri,inv,1));
-        //Thread hilo3 = new Thread(new ThreadLinea3(monitor,RedDePetri,inv,2));
-        //Thread hilo4 = new Thread(new ThreadLinea4(monitor,RedDePetri,inv,3));
-
-        long tiempoInicio=System.currentTimeMillis();
-
         for (int i = 0; i < cantHilos; i++) {
             hilos[i].start();
         }
 
+        long tiempoInicial = System.currentTimeMillis();
+
         while(monitor.getContador()<1000){
             /*try {
-                Thread.sleep(500);
+                Thread.sleep(20);
+                inv.printCantInvTCompletos();
             } catch (InterruptedException e) {
                 e.printStackTrace();
-            }
-            inv.printCantInvTCompletos();*/
-            //System.out.println("");
-       }
+            }*/
+        }
+        long tiempoFinal = System.currentTimeMillis();
 
         for (int i = 0; i < cantHilos; i++) {
             hilos[i].fin();
         }
-
         monitor.finalizar();
 
         for (int i = 0; i < cantHilos; i++) {
@@ -102,23 +91,14 @@ public class Main {
             }
         }
 
-        long tiempoFin=System.currentTimeMillis();
 
-        long tiempoEjecucion=tiempoFin-tiempoInicio;
+        long tiempoEjecucion = tiempoFinal - tiempoInicial;
 
         System.out.println(tiempoEjecucion);
 
-        //hilo1.interrupt();
-        //hilo2.interrupt();
-        //hilo3.interrupt();
-        //hilo4.interrupt();
-
+        inv.printCantInvTCompletos(logger);
         inv.printCantInvTCompletos();
-        //inv.printCantTransicionesInv();
         System.out.println(inv.getTransiciones());
-
-        Log logger = new Log();
-
         logger.logTransiciones(inv.getTransiciones());
 
     }
