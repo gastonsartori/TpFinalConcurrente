@@ -170,14 +170,14 @@ public class RdP {
 
     public boolean chequeoInvP(){
         boolean error= false;
-        for (int i = 0; i < 10; i++) { //recorro cada fila de la matriz de chequeo
+        for (int i = 0; i < matrizPinv.length; i++) { //recorro cada fila de la matriz de chequeo
             int tokens=0;
-            for (int j = 0; j < 18; j++) { //recorro cada elemento de la fila
+            for (int j = 0; j < matrizPinv[i].length-1; j++) { //recorro cada elemento de la fila
                 if(matrizPinv[i][j] == 1){ //si hay un 1, esa plaza pertnece a ese invariante
                     tokens+=marcado[j]; //se acumulan los tokens de esa plaza
                 }
             }
-            if(tokens!=matrizPinv[i][18]){ //al final, la acumulacion debe ser igual al invariante
+            if(tokens!=matrizPinv[i][matrizPinv[i].length-1]){ //al final, la acumulacion debe ser igual al invariante
                 error = true;
                 break;
             }

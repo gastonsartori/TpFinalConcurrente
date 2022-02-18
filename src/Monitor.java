@@ -53,7 +53,7 @@ public class Monitor {
                     if(intervalo > 0) {
                         despertar();
                         //System.out.println("me wa mimir por" + intervalo + Thread.currentThread().getName() + "desde" + System.currentTimeMillis());
-                        espera_temporales.await(100, TimeUnit.MILLISECONDS);
+                        espera_temporales.await(intervalo, TimeUnit.MILLISECONDS);
                         //System.out.println("me desperte" + Thread.currentThread().getName() + "a los" + System.currentTimeMillis());
                         //System.out.println(System.currentTimeMillis());
                     }
@@ -129,22 +129,21 @@ public class Monitor {
         //System.out.println("despertar");
         if(!finalizo){ //si ya se finalizo, no se tiene en cuenta la politica
             ArrayList<Integer> despertarTr = politica.determinarTr(); //la politica determina que invaraintes pueden ser ejecutados
-            boolean desperte=false;
-
+            boolean desperte = false;
             for (int i = 0; i < despertarTr.size(); i++) {
                 if(mutex.hasWaiters(colas[despertarTr.get(i)])){
                     //System.out.println("despertar" + i);
-                    colas[despertarTr.get(i)].signalAll();
+                    colas[despertarTr.get(i)].signal();
                     desperte=true;
                     break;
                 }
             }
-
-            for (int i = 0; i < RedDePetri.cantT; i++) {
-                if(RedDePetri.esTemporal(i) && mutex.hasWaiters(colas[i]) && !mutex.hasWaiters(espera_temporales)){
-                    colas[i].signalAll();
+            if(!desperte) // si no desperto a ningun hilo, despierto a un hilo temporal que durmio por falta de recursos.
+                for (int i = 0; i < RedDePetri.cantT; i++) {
+                    if(RedDePetri.esTemporal(i) && mutex.hasWaiters(colas[i])){
+                        colas[i].signal();
+                    }
                 }
-            }
 
             /*if(!desperte && !mutex.hasWaiters(espera_temporales)){
                 for (int i = 0; i < RedDePetri.cantT; i++) {
