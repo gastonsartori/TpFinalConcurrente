@@ -6,8 +6,8 @@ public class Log {
     private FileWriter file;
     private PrintWriter pw;
 
-    private String LOG_DIR = "./data/log.txt";
-    private String LOG_I_DIR = "./data/log_inv.txt";
+    private final String LOG_DIR = "./data/log.txt";
+    private final String LOG_I_DIR = "./data/log_inv.txt";
 
     public Log() {
         file = null;

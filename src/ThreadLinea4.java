@@ -16,18 +16,12 @@ public class ThreadLinea4 extends ThreadLinea {
 
             dispararTransicion(4,linea);  //TRANSICION 16
             inv.logTransicion(16,linea);
-            /*System.out.println("T16");
-            System.out.println(System.currentTimeMillis());*/
 
             dispararTransicion(5,linea);  //TRANSICION 17
             inv.logTransicion(17,linea);
-            /*System.out.println("T17");
-            System.out.println(System.currentTimeMillis());*/
 
             dispararTransicion(6,linea);  //TRANSICION 18
             inv.logTransicion(18,linea);
-            /*System.out.println("T18");
-            System.out.println(System.currentTimeMillis());*/
 
             inv.incInv(linea);
 

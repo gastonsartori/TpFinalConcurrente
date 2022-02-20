@@ -1,7 +1,7 @@
 public class Main {
 
-    private static int cantP = 18;  //cantidad de plazas de la red
-    private static int cantT = 12;  //cantidad de transiciones de la red
+    private static int cantP = 18;  //Cantidad de plazas de la red
+    private static int cantT = 12;  //Cantidad de transiciones de la red
     private static int cantHilos =12;
     private static float porcentajeDePrioridadNoTemporales = (float) 0.1;
     private static Datos datos;
@@ -12,14 +12,8 @@ public class Main {
     private static ThreadLinea[] hilos;
     private static Log logger;
 
-    public static int getCantP() {
-        return cantP;
-    }
     public static int getCantT() {
         return cantT;
-    }
-    public static int getCantHilos() {
-        return cantHilos;
     }
     public static float getPorcentajeDePrioridadNoTemporales() {return porcentajeDePrioridadNoTemporales;}
 
@@ -27,11 +21,11 @@ public class Main {
 
         datos=new Datos();
 
-        RedDePetri=new RdP(datos.crearMarcado("marcado.xls",cantP), //marcad inicial de la red
-                                datos.crearMatriz("matrizW.xls",cantT,cantP), //matriz de incidencia conmbinada
-                                datos.crearMatriz("matrizB.xls",cantT,cantP), //matriz de incidencia negativa
-                                datos.crearMatriz("pruebaInvP.xls",19,10), //invariantes de plaza
-                                datos.crearMatriz("transicionesPorInv.xls",3,4), //invariantes de transicion
+        RedDePetri=new RdP(datos.crearMarcado("marcado.xls",cantP), //Marcado inicial de la red
+                                datos.crearMatriz("matrizW.xls",cantT,cantP), //Matriz de incidencia conmbinada
+                                datos.crearMatriz("matrizB.xls",cantT,cantP), //Matriz de incidencia negativa
+                                datos.crearMatriz("pruebaInvP.xls",19,10), //Invariantes de plaza
+                                datos.crearMatriz("transicionesPorInv.xls",3,4), //Invariantes de transicion
                                 datos.crearMarcado("tiempoTransiciones.xls",cantT),
                                 cantT,cantP);
 
