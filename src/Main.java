@@ -3,7 +3,7 @@ public class Main {
     private static int cantP = 18;  //Cantidad de plazas de la red
     private static int cantT = 12;  //Cantidad de transiciones de la red
     private static int cantHilos =12;
-    private static float porcentajeDePrioridadNoTemporales = (float) 0.1;
+    private static float porcentajeDePrioridadNoTemporales = (float) 0.01;
     private static Datos datos;
     private static RdP RedDePetri;
     private static InvariantesT inv;
@@ -60,17 +60,16 @@ public class Main {
             hilos[i].start();
         }
 
-        long tiempoInicial = System.currentTimeMillis();
 
         while(monitor.getContador()<1000){
             try {
+
                 Thread.sleep(20);
                 inv.printCantInvTCompletos();
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
         }
-        long tiempoFinal = System.currentTimeMillis();
 
         for (int i = 0; i < cantHilos; i++) {
             hilos[i].fin();
@@ -85,14 +84,9 @@ public class Main {
             }
         }
 
-
-        long tiempoEjecucion = tiempoFinal - tiempoInicial;
-
         inv.printCantInvTCompletos(logger);
         inv.printCantInvTCompletos();
         System.out.println(inv.getTransiciones());
-
-        System.out.println("Tiempo de ejecucion: " + tiempoEjecucion + "ms");
         logger.logTransiciones(inv.getTransiciones());
 
     }
