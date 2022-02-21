@@ -56,11 +56,11 @@ public class RdP {
                     }
                     break;
                 }else{
-                    habilitadas[i]=true; //Si tiene los tokens, y en caso de ser temporal, transcurrió el tiempo, esta habilitada
+                    habilitadas[i]=true; //Si tiene los tokens, esta habilitada
 
                 }
             }
-            if(esTemporal(i) && habilitadas[i]){    //Si la transicion es temporal
+            if(esTemporal(i) && habilitadas[i]){    //Si la transicion es temporal y tiene los tokens necesarios
                 if(tiempoDeSensibilizacion[i]==0){  //Si el tiempo aun no esta contando
                     tiempoDeSensibilizacion[i] = System.currentTimeMillis(); //Se setea el inicio del conteo
                     habilitadas[i]=false;           //No esta habilitada pq recien empieza a contar

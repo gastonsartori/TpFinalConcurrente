@@ -37,30 +37,28 @@ public class Monitor {
 
             while (!(RedDePetri.isHabilitada(transicion))) { //Si la transicion deseada no esta habilitada
 
-                if(RedDePetri.esTemporal(transicion) && RedDePetri.getTiempoDeSensibilizacion(transicion) !=0) {
+                if(RedDePetri.esTemporal(transicion) && RedDePetri.getTiempoDeSensibilizacion(transicion) !=0) { //Si es porque aun no se cumplio el tiempo
 
                     long tiempoActual = System.currentTimeMillis();
                     long intervalo = RedDePetri.getTiempoDeTransicion(transicion) - (tiempoActual - RedDePetri.getTiempoDeSensibilizacion(transicion));
                     if(intervalo > 0) {
                         despertar();
-                        espera_temporales.await(intervalo, TimeUnit.MILLISECONDS);
+                        espera_temporales.await(intervalo, TimeUnit.MILLISECONDS); //Espera el tiempo restante
                     }
                     RedDePetri.habilitacion();
-
                 }
-                else {
+                else { //Si es por no tener tokens/recurso
                     despertar();
-                    colas[transicion].await();
+                    colas[transicion].await();//El hilo espera en la cola de espera de su transicion
                 }
-                //El hilo espera en la cola de su invaraiante
             }
 
-            RedDePetri.disparo(transicion); // Si estaba habilitada, se dispara la transicion
-            despertar(); //Antes de salir del monitor, despierta a los demas hilos
+            RedDePetri.disparo(transicion); // Cuando este habilitada, se dispara la transicion
 
         } catch (InterruptedException e) {
             e.printStackTrace();
         } finally {
+            despertar(); //Antes de salir del monitor, despierta al siguiente hilo
             mutex.unlock(); //Libera el lock
         }
     }
@@ -80,21 +78,12 @@ public class Monitor {
     public void despertar(){
         if(!finalizo){ //Si ya se finalizo, no se tiene en cuenta la politica
             ArrayList<Integer> despertarTr = politica.determinarTr(); //La politica determina que invariantes pueden ser ejecutados
-            boolean desperte = false;
             for (int i = 0; i < despertarTr.size(); i++) {
                 if(mutex.hasWaiters(colas[despertarTr.get(i)])){
                     colas[despertarTr.get(i)].signal();
-                    desperte=true;
                     break;
                 }
             }
-            if(!desperte) // Si no desperto a ningun hilo, despierto a un hilo temporal que durmio por falta de recursos.
-                for (int i = 0; i < RedDePetri.cantT; i++) {
-                    if(RedDePetri.esTemporal(i) && mutex.hasWaiters(colas[i])){
-                        colas[i].signal();
-                    }
-                }
-
         }else {
             for (int i = 0; i < Main.getCantT(); i++) {
                 colas[i].signalAll();
