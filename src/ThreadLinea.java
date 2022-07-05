@@ -13,7 +13,20 @@ public class ThreadLinea extends Thread{
     }
 
     public void dispararTransicion(int transicion,int linea){
-        monitor.disparar(transicion);
+
+        while(!monitor.disparar(transicion)){
+            long tiempoSleep =red.getTiempoDeSleep(transicion);
+
+            if (tiempoSleep > 0) {
+                try {
+                    //System.out.println("Duermo: " + System.currentTimeMillis());
+                    sleep(tiempoSleep);
+                    //System.out.println("Despierto: " + System.currentTimeMillis());
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
         inv.incTransicion(linea);
 
     }

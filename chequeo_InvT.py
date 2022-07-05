@@ -25,6 +25,6 @@ def InvTCheck(inv_t_log):
 	else:
 		return("FALLO EN T-INVARIANTES\n" + cadena[0])
 
-inv_t_log = open("C:/Gaston/Facultad/PROGRAMACION CONCURRENTE/TpFinal/TP/data/log.txt" , "r")
+inv_t_log = open("./data/log.txt" , "r")
 
 print('\nResultado de chequeo en T-Invariantes: ' + InvTCheck(inv_t_log) + '\n')

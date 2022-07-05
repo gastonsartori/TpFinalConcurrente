@@ -31,8 +31,6 @@ public class InvariantesT { //Se encarga de la informacion de transciones dispar
         }
     }
 
-
-
     public synchronized void incInv(int linea){
         invCompletos[linea]++;
     }
@@ -41,6 +39,17 @@ public class InvariantesT { //Se encarga de la informacion de transciones dispar
     }
 
     public int getCantInvCompletosTr(int transicion){ return invCompletos[invTr[transicion]];}
+
+    /*public int[] getMenorInvCompletos(){
+
+        int [] invOrdenados = new int[invCompletos.length];
+
+        for (int i = 0; i < invCompletos.length; i++) {
+            if(invCompletos[i] > invCompletos[i+1]{
+
+            }
+        }
+    }*/
 
 
 

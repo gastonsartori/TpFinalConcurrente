@@ -9,7 +9,8 @@ public class RdP {
     private long[]  tiempoDeSensibilizacion; //Tiempo en que se sensibilizo cada transicion temporal
     private int[]  transicionesTemporales; //Determina que transiciones son temporales, la que si lo son, almacenan el tiempo asignado
 
-    private boolean[]   habilitadas; //Almacena las transiciones que se encuentran habilitadas en ese momento
+    private boolean[] sensibilizadas; //Almacena las transiciones que se encuentran habilitadas en ese momento
+    private boolean[] esperando;
 
     public RdP(int[] marcado, int[][] matrizW, int[][] matrizB, int[][] matrizPinv, int[][] transicionesPorInv, int[] transicionesTemporales, int cantT, int cantP) {
         this.marcado = marcado;
@@ -24,11 +25,16 @@ public class RdP {
             tiempoDeSensibilizacion[i]=0;
         }
 
-        this.habilitadas = new boolean[cantT];
+        this.sensibilizadas = new boolean[cantT];
         this.cantT=cantT;
         this.cantP=cantP;
 
-        habilitacion();
+        esperando=new boolean[cantT];
+        for (int i = 0; i < esperando.length; i++) {
+            esperando[i]=false;
+        }
+
+        sensibilizacion();
 
     }
 
@@ -38,39 +44,36 @@ public class RdP {
      * @return estado de habilitacion de la transicion
      */
 
-    public boolean isHabilitada(int transicion) {
-        return habilitadas[transicion];
+    public boolean estaSensibilizada(int transicion) {
+        return sensibilizadas[transicion];
     }
 
     /**
-     * Determina cuales transiciones estan habilitadas
+     * Determina cuales transiciones estan sensibilizadas
      */
-    public void habilitacion() {
+    public void sensibilizacion() {
         for (int i = 0; i < cantT; i++) {
             for (int j = 0; j < cantP; j++) {
                 //chequeo de tokens
                 if (marcado[j] < matrizB[j][i] && matrizB[j][i]!=0) { // Recorro la matriz W-, si hay conexion de una P a una T, esa plaza
-                    habilitadas[i] = false;                           // debe tener tokens, sino la T no esta habilitada
+                    sensibilizadas[i] = false;                           // debe tener tokens, sino la T no esta habilitada
                     if(esTemporal(i)){                                // En caso de transicion temporal, se resetea el tiempo
                         tiempoDeSensibilizacion[i]=0;
+                        resetEsperando(i);
                     }
                     break;
                 }else{
-                    habilitadas[i]=true; //Si tiene los tokens, esta habilitada
-
-                }
-            }
-            if(esTemporal(i) && habilitadas[i]){    //Si la transicion es temporal y tiene los tokens necesarios
-                if(tiempoDeSensibilizacion[i]==0){  //Si el tiempo aun no esta contando
-                    tiempoDeSensibilizacion[i] = System.currentTimeMillis(); //Se setea el inicio del conteo
-                    habilitadas[i]=false;           //No esta habilitada pq recien empieza a contar
-                }
-                else{                               //Si el tiempo ya estaba contando
-                    if(!tiempoFinalizado(i)){       //Se determina si transcurrio el tiempo necesario
-                        habilitadas[i]=false;       //Si no lo hizo, no esta habilitada
+                    sensibilizadas[i]=true; //Si tiene los tokens, esta sensibilazada
+                    if(esTemporal(i) && tiempoDeSensibilizacion[i]==0){ //si no tenia marca de tiempo, se setea
+                        tiempoDeSensibilizacion[i] = System.currentTimeMillis();
                     }
                 }
             }
+//            if(esTemporal(i) && sensibilizadas[i]){    //Si la transicion es temporal y tiene los tokens necesarios
+//                if(tiempoDeSensibilizacion[i]==0){  //Si el tiempo aun no esta contando
+//                    tiempoDeSensibilizacion[i] = System.currentTimeMillis(); //Se setea el inicio del conteo
+//                }
+//            }
         }
     }
 
@@ -81,23 +84,54 @@ public class RdP {
      * @param transicion
      */
     public void disparo(int transicion){
-        for (int i = 0; i < cantP; i++) {
-            marcado[i]+=matrizW[i][transicion];
-        }
-        habilitacion();
+
+        actMarcado(transicion);
+
+        tiempoDeSensibilizacion[transicion]=0;
+        resetEsperando(transicion);
+
+        sensibilizacion();
+
         if(chequeoInvP()){
            System.out.println("ERROR");
            System.exit(1);
         }
     }
 
+    public void actMarcado(int transicion){
+        for (int i = 0; i < cantP; i++) {
+            // aplicacion de la ec fundamental
+            marcado[i]+=matrizW[i][transicion];
+        }
+    }
+
+    public void setEsperando(int transicion){
+        esperando[transicion]=true;
+    }
+    public void resetEsperando(int transicion){
+        esperando[transicion]=false;
+    }
+
+    public boolean checkEsperando(int transicion){
+        return esperando[transicion];
+    }
+
+    public long getTiempoDeSleep(int transicion){
+        long tiempoActual = System.currentTimeMillis();
+        long alfa = getAlfaDeTransicion(transicion);
+        long tiempoDeSensibilizacion = getTiempoDeSensibilizacion(transicion);
+
+        long tiempoSleep = tiempoDeSensibilizacion + alfa - tiempoActual;
+
+        return tiempoSleep;
+    }
 
     public long getTiempoDeSensibilizacion(int transicion) {
         return tiempoDeSensibilizacion[transicion];
     }
 
 
-    public long getTiempoDeTransicion(int transicion) {
+    public long getAlfaDeTransicion(int transicion) {
         return transicionesTemporales[transicion];
     }
 
@@ -132,14 +166,35 @@ public class RdP {
     }
 
 
-    public boolean tiempoFinalizado(int transicion){
+    public boolean chequeoVentanaTiempo(int transicion){
 
-        long tiempoActual = System.currentTimeMillis();
-        long intervalo = tiempoActual - tiempoDeSensibilizacion[transicion];
-
-        if(transicionesTemporales[transicion] < intervalo ) {	// Si se cumplio el tiempo para ser habilitada
+        if(!esTemporal(transicion)){
             return true;
         }
+
+        if(tiempoDeSensibilizacion[transicion]!=0){
+            long tiempoActual = System.currentTimeMillis();
+            long intervalo = tiempoActual - tiempoDeSensibilizacion[transicion];
+            if(transicionesTemporales[transicion] < intervalo ) {	// Si se cumplio el tiempo de sensibilizado
+                return true;
+            }
+        }
         return false;
+    }
+
+    public void printSensibilizadas(){
+        System.out.print("Sensibilizadas:");
+        for (int i = 0; i < cantT; i++) {
+            if(sensibilizadas[i])
+                System.out.print(i);
+        }
+        System.out.println("");
+    }
+
+    public void printMarcado(){
+        System.out.print("Marcado:");
+        for (int i = 0; i < cantP; i++)
+            System.out.print(marcado[i]);
+        System.out.println("");
     }
 }

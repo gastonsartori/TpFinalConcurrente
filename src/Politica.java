@@ -19,17 +19,16 @@ public class Politica {
 
     public ArrayList<Integer> determinarTr() { //Determina la transicion que puede ejecutarse
 
-
         ArrayList<Integer> trDisparables = new ArrayList<>();//ArrayList de transiciones disparables ordenados de mayor a menor prioridad
 
         for (int i = 0; i < Main.getCantT(); i++) { //Selecciono la transicion a analizar
-            if((RedDePetri.isHabilitada(i) || RedDePetri.getTiempoDeSensibilizacion(i) != 0) && conflicto(i)){ // Solo si esta habilitada
+            if(RedDePetri.estaSensibilizada(i) && conflicto(i)){ // Solo si esta habilitada
                 for (int j = 0; j < Main.getCantT(); j++) {
                     if(j==trDisparables.size()){
                         trDisparables.add(j,i);
                         break;
                     }else {
-                        if(inv.getCantInvCompletosTr(i) < inv.getCantInvCompletosTr(j)){
+                        if(inv.getCantInvCompletosTr(i) < inv.getCantInvCompletosTr(trDisparables.get(j))){
                             trDisparables.add(j,i);
                             break;
                         }
@@ -37,6 +36,8 @@ public class Politica {
                 }
             }
         }
+
+
 
         return trDisparables;
     }

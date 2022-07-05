@@ -1,3 +1,5 @@
+import java.sql.SQLOutput;
+
 public class Main {
 
     private static int cantP = 18;  //Cantidad de plazas de la red
@@ -60,16 +62,17 @@ public class Main {
             hilos[i].start();
         }
 
+        long tiempoInicial=System.currentTimeMillis();
 
         while(monitor.getContador()<1000){
             try {
-
                 Thread.sleep(20);
                 inv.printCantInvTCompletos();
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
         }
+        long tiempoFinal=System.currentTimeMillis();
 
         for (int i = 0; i < cantHilos; i++) {
             hilos[i].fin();
@@ -83,6 +86,8 @@ public class Main {
                 e.printStackTrace();
             }
         }
+
+        System.out.println("tiempo total: " + (tiempoFinal-tiempoInicial));
 
         inv.printCantInvTCompletos(logger);
         inv.printCantInvTCompletos();
