@@ -10,7 +10,7 @@ public class RdP {
     private int[]  transicionesTemporales; //Determina que transiciones son temporales, la que si lo son, almacenan el tiempo asignado
 
     private boolean[] sensibilizadas; //Almacena las transiciones que se encuentran habilitadas en ese momento
-    private boolean[] esperando;
+    private long[] esperando;
 
     public RdP(int[] marcado, int[][] matrizW, int[][] matrizB, int[][] matrizPinv, int[][] transicionesPorInv, int[] transicionesTemporales, int cantT, int cantP) {
         this.marcado = marcado;
@@ -29,9 +29,9 @@ public class RdP {
         this.cantT=cantT;
         this.cantP=cantP;
 
-        esperando=new boolean[cantT];
+        esperando=new long[cantT];
         for (int i = 0; i < esperando.length; i++) {
-            esperando[i]=false;
+            esperando[i]=0;
         }
 
         sensibilizacion();
@@ -64,16 +64,13 @@ public class RdP {
                     break;
                 }else{
                     sensibilizadas[i]=true; //Si tiene los tokens, esta sensibilazada
-                    if(esTemporal(i) && tiempoDeSensibilizacion[i]==0){ //si no tenia marca de tiempo, se setea
-                        tiempoDeSensibilizacion[i] = System.currentTimeMillis();
-                    }
                 }
             }
-//            if(esTemporal(i) && sensibilizadas[i]){    //Si la transicion es temporal y tiene los tokens necesarios
-//                if(tiempoDeSensibilizacion[i]==0){  //Si el tiempo aun no esta contando
-//                    tiempoDeSensibilizacion[i] = System.currentTimeMillis(); //Se setea el inicio del conteo
-//                }
-//            }
+            if(esTemporal(i) && sensibilizadas[i]){    //Si la transicion es temporal y tiene los tokens necesarios
+                if(tiempoDeSensibilizacion[i]==0){  //Si el tiempo aun no esta contando
+                    tiempoDeSensibilizacion[i] = System.currentTimeMillis(); //Se setea el inicio del conteo
+                }
+            }
         }
     }
 
@@ -106,14 +103,20 @@ public class RdP {
     }
 
     public void setEsperando(int transicion){
-        esperando[transicion]=true;
+        esperando[transicion]=Thread.currentThread().getId();
     }
     public void resetEsperando(int transicion){
-        esperando[transicion]=false;
+        esperando[transicion]=0;
     }
 
     public boolean checkEsperando(int transicion){
-        return esperando[transicion];
+        if(esperando[transicion] == 0){
+            return false;
+        }else if(esperando[transicion] == Thread.currentThread().getId()){
+            return false;
+        }else {
+            return true;
+        }
     }
 
     public long getTiempoDeSleep(int transicion){
@@ -175,7 +178,8 @@ public class RdP {
         if(tiempoDeSensibilizacion[transicion]!=0){
             long tiempoActual = System.currentTimeMillis();
             long intervalo = tiempoActual - tiempoDeSensibilizacion[transicion];
-            if(transicionesTemporales[transicion] < intervalo ) {	// Si se cumplio el tiempo de sensibilizado
+//            System.out.println("PASARON " + intervalo + " MILISEGUNDOS TRANS "+ transicion);
+            if(transicionesTemporales[transicion] < intervalo) {	// Si se cumplio el tiempo de sensibilizado
                 return true;
             }
         }
