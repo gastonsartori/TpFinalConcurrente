@@ -288,3 +288,13 @@ Cantidad de invariantes completos en linea 1:252
 Cantidad de invariantes completos en linea 2:255
 Cantidad de invariantes completos en linea 3:250
 Cantidad de invariantes completos en linea 4:255
+------------------------------------------------------------------------------
+Cantidad de invariantes completos en linea 1:252
+Cantidad de invariantes completos en linea 2:254
+Cantidad de invariantes completos en linea 3:252
+Cantidad de invariantes completos en linea 4:254
+------------------------------------------------------------------------------
+Cantidad de invariantes completos en linea 1:253
+Cantidad de invariantes completos en linea 2:254
+Cantidad de invariantes completos en linea 3:252
+Cantidad de invariantes completos en linea 4:253

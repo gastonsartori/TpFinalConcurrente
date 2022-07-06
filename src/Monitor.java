@@ -1,8 +1,5 @@
 import java.util.ArrayList;
 import java.util.concurrent.Semaphore;
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.locks.Condition;
-import java.util.concurrent.locks.ReentrantLock;
 
 public class Monitor {
 
@@ -15,6 +12,8 @@ public class Monitor {
     private Semaphore[] colas;
 
     private int contador; //Se usa para el control de los 1000 invariantes que deben completarse
+
+    private ArrayList<Integer> trDisparables;
 
     public Monitor(RdP redDePetri,Politica politica) {
         RedDePetri = redDePetri;
@@ -39,36 +38,22 @@ public class Monitor {
 //            System.out.println("ENTRO A DISPARAR " + transicion);
             mutex.acquire();
 
-            while (!(RedDePetri.estaSensibilizada(transicion))){//en caso de que la transicion no este sensibilizada
+            if (!(RedDePetri.estaSensibilizada(transicion)) || RedDePetri.checkEsperando(transicion) ){//en caso de que la transicion no este sensibilizada
                 mutex.release();
 //                System.out.println("NO ESTA SENSIBILIZADA TRANSICION" + transicion);
                 colas[transicion].acquire();
             }
 
-            if (RedDePetri.chequeoVentanaTiempo(transicion)) { //chequeo de la ventana
-                //ventana==true
-                if(RedDePetri.checkEsperando(transicion)){  //si estoy dentro, se chequea si no hay alguno ya esperando
-                    //esperando==true
-                    mutex.release();
-//                    System.out.println("HAY UNO ESPERANDO TRANSICION" + transicion);
-
-                    colas[transicion].acquire();
-                }
-            }else{
-                //ventana==false
-//                System.out.println("NO SE CUMPLIO TIEMPO TRANS " + transicion);
+            if (!RedDePetri.chequeoVentanaTiempo(transicion)) { //chequeo de la ventana
                 RedDePetri.setEsperando(transicion);
                 mutex.release();
                 return false;
             }
 //            System.out.println("DISPARE TRANSICION" + transicion);
             RedDePetri.disparo(transicion); //se dispara la transicion, ejecuta actMarcado() y actSensibilziadas()
+
             if(hayHilosEsperando()){
-                Integer tr = transicionDisparable();
-                if(tr == -1){
-                    mutex.release();
-                    return true;
-                }
+                Integer tr = cualDespertar();
                 colas[tr].release();
             }else{
                 mutex.release();
@@ -76,14 +61,10 @@ public class Monitor {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-
 //        despertar(); //señaliza al siguiente hilo, utilizando la politica
 //       OJOTAAA mutex.unlock(); //libera el lock
-
         return true;
     }
-
-
 
     public synchronized void incContador(){
         contador ++;
@@ -97,7 +78,31 @@ public class Monitor {
         finalizo=true;
     }
 
-/*    public void despertar(){
+    public boolean hayHilosEsperando(){
+
+        trDisparables = politica.determinarTr();
+
+        for (int i = 0; i < trDisparables.size(); i++) {
+            Integer trDisparable = trDisparables.get(i);
+            if(colas[trDisparable].hasQueuedThreads()){
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public Integer cualDespertar(){
+
+        for (int i = 0; i < trDisparables.size(); i++) {
+            Integer tr = trDisparables.get(i);
+            if(colas[tr].hasQueuedThreads()){
+                return tr;
+            }
+        }
+        return -1;
+    }
+
+    /*    public void despertar(){
         if(!finalizo){ //Si ya se finalizo, no se tiene en cuenta la politica
             ArrayList<Integer> despertarTr = politica.determinarTr(); //La politica determina que invariantes pueden ser ejecutados
 
@@ -120,28 +125,4 @@ public class Monitor {
             }
         }
     }*/
-
-    public boolean hayHilosEsperando(){
-        for (int i = 0; i < colas.length; i++) {
-            if(colas[i].hasQueuedThreads() && RedDePetri.estaSensibilizada(i)){
-                return true;
-            }
-        }
-        return false;
-    }
-
-    public Integer transicionDisparable(){
-        ArrayList<Integer> despertarTr = politica.determinarTr();
-        if(despertarTr.size() == 0){
-            System.out.println("ARRAY DE TRANSICIONES VACIO");
-        }
-        for (int i = 0; i < despertarTr.size(); i++) {
-            Integer tr = despertarTr.get(i);
-            if(colas[tr].hasQueuedThreads()){
-                return tr;
-            }
-        }
-        return -1;
-    }
-
 }

@@ -34,7 +34,7 @@ public class RdP {
             esperando[i]=0;
         }
 
-        sensibilizacion();
+        actSensibilizadas();
 
     }
 
@@ -51,7 +51,7 @@ public class RdP {
     /**
      * Determina cuales transiciones estan sensibilizadas
      */
-    public void sensibilizacion() {
+    public void actSensibilizadas() {
         for (int i = 0; i < cantT; i++) {
             for (int j = 0; j < cantP; j++) {
                 //chequeo de tokens
@@ -87,7 +87,7 @@ public class RdP {
         tiempoDeSensibilizacion[transicion]=0;
         resetEsperando(transicion);
 
-        sensibilizacion();
+        actSensibilizadas();
 
         if(chequeoInvP()){
            System.out.println("ERROR");
