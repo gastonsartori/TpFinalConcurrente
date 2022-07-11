@@ -19,7 +19,7 @@ public class ThreadLinea extends Thread{
 
             if (tiempoSleep > 0) {
                 try {
-                    //System.out.println("Duermo: " + System.currentTimeMillis());
+                   // System.out.println("Duermo: " + tiempoSleep + "desde " + System.currentTimeMillis());
                     sleep(tiempoSleep);
                     //System.out.println("Despierto: " + System.currentTimeMillis());
                 } catch (InterruptedException e) {

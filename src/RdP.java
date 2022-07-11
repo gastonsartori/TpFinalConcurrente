@@ -169,10 +169,10 @@ public class RdP {
     }
 
 
-    public boolean chequeoVentanaTiempo(int transicion){
+    public boolean antesVentanaTiempo(int transicion){
 
         if(!esTemporal(transicion)){
-            return true;
+            return false;
         }
 
         if(tiempoDeSensibilizacion[transicion]!=0){
@@ -180,10 +180,10 @@ public class RdP {
             long intervalo = tiempoActual - tiempoDeSensibilizacion[transicion];
 //            System.out.println("PASARON " + intervalo + " MILISEGUNDOS TRANS "+ transicion);
             if(transicionesTemporales[transicion] < intervalo) {	// Si se cumplio el tiempo de sensibilizado
-                return true;
+                return false;
             }
         }
-        return false;
+        return true;
     }
 
     public void printSensibilizadas(){

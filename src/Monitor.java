@@ -44,7 +44,7 @@ public class Monitor {
                 colas[transicion].acquire();
             }
 
-            if (!RedDePetri.chequeoVentanaTiempo(transicion)) { //chequeo de la ventana
+            if (RedDePetri.antesVentanaTiempo(transicion)) { //chequeo de la ventana
                 RedDePetri.setEsperando(transicion);
                 mutex.release();
                 return false;
@@ -64,18 +64,6 @@ public class Monitor {
 //        despertar(); //señaliza al siguiente hilo, utilizando la politica
 //       OJOTAAA mutex.unlock(); //libera el lock
         return true;
-    }
-
-    public synchronized void incContador(){
-        contador ++;
-    }
-
-    public synchronized int getContador() {
-        return contador;
-    }
-
-    public void finalizar(){
-        finalizo=true;
     }
 
     public boolean hayHilosEsperando(){
@@ -100,6 +88,18 @@ public class Monitor {
             }
         }
         return -1;
+    }
+
+    public synchronized void incContador(){
+        contador ++;
+    }
+
+    public synchronized int getContador() {
+        return contador;
+    }
+
+    public void finalizar(){
+        finalizo=true;
     }
 
     /*    public void despertar(){
