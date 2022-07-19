@@ -27,6 +27,7 @@ public class InvariantesT { //Se encarga de la informacion de transciones dispar
     public void printCantInvTCompletos(){
         System.out.println("------------------------------------------------------------------------------");
         for (int i = 0; i < 4; i++) {
+//            System.out.println("Cantidad de invariantes completos en linea " + (i+1) + " :" + invCompletos[i] + " y cant de transiciones: " + transicionesInv[i]);
             System.out.println("Cantidad de invariantes completos en linea " + (i+1) + " :" + invCompletos[i]);
         }
     }
@@ -39,6 +40,7 @@ public class InvariantesT { //Se encarga de la informacion de transciones dispar
     }
 
     public int getCantInvCompletosTr(int transicion){ return invCompletos[invTr[transicion]];}
+    public int getCantTransInvTr(int transicion){ return transicionesInv[invTr[transicion]];}
 
     /*public int[] getMenorInvCompletos(){
 

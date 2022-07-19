@@ -90,7 +90,7 @@ public class RdP {
         actSensibilizadas();
 
         if(chequeoInvP()){
-           System.out.println("ERROR");
+           System.out.println("ERROR DE INVARIANTES DE PLAZA");
            System.exit(1);
         }
     }
@@ -200,5 +200,14 @@ public class RdP {
         for (int i = 0; i < cantP; i++)
             System.out.print(marcado[i]);
         System.out.println("");
+    }
+
+    public void printCantTransTemporalesSens(){
+        int cantSens=0;
+        for (int i = 0; i < cantT; i++) {
+            if(sensibilizadas[i] && esTemporal(i))
+                cantSens++;
+        }
+        System.out.println("Cant de trans temporales sensibilizadas:" + cantSens);
     }
 }

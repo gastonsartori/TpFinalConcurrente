@@ -15,6 +15,7 @@ public class Politica {
         finalizo=false;
         invTr= new int[]{0, 2, 2, 2, 3, 3, 3, 0, 0, 1, 1, 1};//Indica a que linea pertenece cada transicion
         conflictos=new int[][]{{5,10},{5,10},{},{},{2},{},{},{},{},{7},{},{}};//Indica cuales transiciones no temporales, tienen conflicto con transiciones temporales.
+//        conflictos=new int[][]{{},{},{},{},{2},{},{},{},{},{7},{},{}};//Indica cuales transiciones no temporales, tienen conflicto con transiciones temporales.
     }
 
     public ArrayList<Integer> determinarTr() { //Determina la transicion que puede ejecutarse
@@ -28,17 +29,14 @@ public class Politica {
                         trDisparables.add(j,i);
                         break;
                     }else {
-                        if(inv.getCantInvCompletosTr(i) < inv.getCantInvCompletosTr(trDisparables.get(j))){
-                            trDisparables.add(j,i);
+                        if(inv.getCantTransInvTr(i) < inv.getCantTransInvTr(trDisparables.get(j))){
+                                trDisparables.add(j,i);
                             break;
                         }
                     }
                 }
             }
         }
-
-
-
         return trDisparables;
     }
 
@@ -55,7 +53,7 @@ public class Politica {
             for (int i = 0; i < conflictos[transicion].length; i++) {
                 int trConflictiva = conflictos[transicion][i];
                 if(RedDePetri.getTiempoDeSensibilizacion(trConflictiva) != 0){
-                    if(inv.getCantInvCompletosTr(trConflictiva) > inv.getCantInvCompletosTr(transicion)*(1+Main.getPorcentajeDePrioridadNoTemporales())){
+                    if(inv.getCantTransInvTr(trConflictiva) > inv.getCantTransInvTr(transicion)*(1+Main.getPorcentajeDePrioridadNoTemporales())){
                         habilitar=true;
                     }else{
                         habilitar= false;

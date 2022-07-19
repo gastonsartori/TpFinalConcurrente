@@ -5,6 +5,7 @@ public class Main {
     private static int cantP = 18;  //Cantidad de plazas de la red
     private static int cantT = 12;  //Cantidad de transiciones de la red
     private static int cantHilos =12;
+    private static int cantInvariantes = 1000;
     private static float porcentajeDePrioridadNoTemporales = (float) 0.01;
     private static Datos datos;
     private static RdP RedDePetri;
@@ -64,10 +65,11 @@ public class Main {
 
         long tiempoInicial=System.currentTimeMillis();
 
-        while(monitor.getContador()<1000){
+        while(monitor.getContador() < cantInvariantes){
             try {
                 Thread.sleep(20);
                 inv.printCantInvTCompletos();
+//                System.out.println(inv.getTransiciones());
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
@@ -87,12 +89,13 @@ public class Main {
             }
         }
 
-        System.out.println("tiempo total: " + (tiempoFinal-tiempoInicial));
-
-        inv.printCantInvTCompletos(logger);
         inv.printCantInvTCompletos();
         System.out.println(inv.getTransiciones());
+        System.out.println("Tiempo de ejecucion: " + (tiempoFinal-tiempoInicial) + " ms");
+
+        inv.printCantInvTCompletos(logger);
         logger.logTransiciones(inv.getTransiciones());
+        logger.logTiempo((tiempoFinal-tiempoInicial));
 
     }
 }

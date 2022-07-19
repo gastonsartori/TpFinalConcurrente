@@ -3,12 +3,10 @@ import java.util.concurrent.Semaphore;
 
 public class Monitor {
 
-    private RdP RedDePetri; //Red a manejar
-//    private ReentrantLock mutex; //Solo un hilo puede entrar al monitor a la vez
+    private RdP RedDePetri;
     private Semaphore mutex;
     private boolean finalizo;
     private Politica politica;
-//    private Condition[] colas;
     private Semaphore[] colas;
 
     private int contador; //Se usa para el control de los 1000 invariantes que deben completarse
@@ -17,9 +15,6 @@ public class Monitor {
 
     public Monitor(RdP redDePetri,Politica politica) {
         RedDePetri = redDePetri;
-        /*mutex = new ReentrantLock();
-
-        colas=new Condition[Main.getCantT()];*/
 
         mutex = new Semaphore(1);
 
@@ -38,20 +33,27 @@ public class Monitor {
 //            System.out.println("ENTRO A DISPARAR " + transicion);
             mutex.acquire();
 
-            if (!(RedDePetri.estaSensibilizada(transicion)) || RedDePetri.checkEsperando(transicion) ){//en caso de que la transicion no este sensibilizada
+            if (!RedDePetri.estaSensibilizada(transicion)){
+                //en caso de que la transicion no este sensibilizada, espera por el recurso
                 mutex.release();
-//                System.out.println("NO ESTA SENSIBILIZADA TRANSICION" + transicion);
                 colas[transicion].acquire();
             }
-
-            if (RedDePetri.antesVentanaTiempo(transicion)) { //chequeo de la ventana
+            if(RedDePetri.checkEsperando(transicion)){
+                //en caso de que un hilo ya este esperando por esa transicion, espera por el recurso
+                mutex.release();
+                colas[transicion].acquire();
+            }
+            if (RedDePetri.antesVentanaTiempo(transicion)){
+                //en caso de estar antes de la ventana, se setea esperando y sale
                 RedDePetri.setEsperando(transicion);
                 mutex.release();
                 return false;
             }
-//            System.out.println("DISPARE TRANSICION" + transicion);
+
+            //si se cumplieron las condiciones, dispara la transicion
             RedDePetri.disparo(transicion); //se dispara la transicion, ejecuta actMarcado() y actSensibilziadas()
 
+            //determina si despertar a otro hilo o solo salir del monitor
             if(hayHilosEsperando()){
                 Integer tr = cualDespertar();
                 colas[tr].release();
@@ -61,8 +63,7 @@ public class Monitor {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-//        despertar(); //señaliza al siguiente hilo, utilizando la politica
-//       OJOTAAA mutex.unlock(); //libera el lock
+
         return true;
     }
 
@@ -102,27 +103,4 @@ public class Monitor {
         finalizo=true;
     }
 
-    /*    public void despertar(){
-        if(!finalizo){ //Si ya se finalizo, no se tiene en cuenta la politica
-            ArrayList<Integer> despertarTr = politica.determinarTr(); //La politica determina que invariantes pueden ser ejecutados
-
-            for (int i = 0; i < despertarTr.size(); i++) {
-                System.out.print(despertarTr.get(i));
-            }
-            System.out.println("");
-
-            for (int i = 0; i < despertarTr.size(); i++) {
-                //System.out.println(mutex.hasWaiters(colas[despertarTr.get(i)]));
-                if(mutex.hasWaiters(colas[despertarTr.get(i)])){
-                    colas[despertarTr.get(i)].signal();
-                    break;
-                }
-            }
-
-        }else {
-            for (int i = 0; i < Main.getCantT(); i++) {
-                colas[i].signalAll();
-            }
-        }
-    }*/
 }
