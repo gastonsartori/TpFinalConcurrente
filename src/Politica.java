@@ -18,8 +18,12 @@ public class Politica {
     }
 
 
-
-    public boolean sonDisparables(boolean[] transiciones) {
+    /**
+     * Determina si las transiciones posibles de disparar tienen conflicto.
+     * @param transiciones
+     * @return
+     */
+    public boolean hayDisparable(boolean[] transiciones) {
         for (int i = 0; i < transiciones.length; i++) {
             if(transiciones[i] && conflicto(i)){
                 return true;
@@ -52,15 +56,18 @@ public class Politica {
         return habilitar;
     }
 
-    public int determinarTr(boolean[] transiciones) { //Determina la transicion que puede ejecutarse
+    /**
+     * Determinar cual transicion despertar, teniendo en cuenta la cantidad de invariantes completos de cada uno.
+     * @param transiciones
+     * @return
+     */
+    public int cualDespertar(boolean[] transiciones) { //Determina la transicion que puede ejecutarse
         int trADisparar = -1;
 
         for (int i = 0; i < transiciones.length; i++) { //Selecciono la transicion a analizar
-            if(transiciones[i] && conflicto(i)){ // Solo si tiene hilos esperando y esta sensibilizada
-                if(trADisparar == -1 || inv.getCantTransInvTr(i) < inv.getCantTransInvTr(trADisparar)){
+            if(transiciones[i] && conflicto(i)){ //Si es disparable
+                if(trADisparar == -1 || inv.getCantTransInvTr(i) < inv.getCantTransInvTr(trADisparar))
                     trADisparar = i;
-                }
-
             }
         }
         return trADisparar;

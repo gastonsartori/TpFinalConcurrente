@@ -55,7 +55,7 @@ public class Monitor {
 
             //determina si despertar a otro hilo o solo salir del monitor
             if(hayHilosEsperando()){
-                int tr = politica.determinarTr(transSensConHilos);
+                int tr = politica.cualDespertar(transSensConHilos);
                 colas[tr].release();
             }else{
                 mutex.release();
@@ -73,15 +73,15 @@ public class Monitor {
      */
     public boolean hayHilosEsperando(){
 
-        boolean[] sensibilizadas = RedDePetri.getSensibilizadas();
-        boolean[] hilosEnColas = getHilosEnColas();
+        boolean[] sensibilizadas = RedDePetri.getSensibilizadas(); //Obtengo el array de sensibilizacion
+        boolean[] hilosEnColas = getHilosEnColas(); //Obtengo la presencia de hilos en colas de condicion
 
 
         for (int i = 0; i < sensibilizadas.length; i++) {
-            transSensConHilos[i] = hilosEnColas[i] && sensibilizadas[i];
+            transSensConHilos[i] = hilosEnColas[i] && sensibilizadas[i]; //AND logico entre los dos array
         }
 
-        return politica.sonDisparables(transSensConHilos);
+        return politica.hayDisparable(transSensConHilos); //Pregunto si hay alguna transicion disparable entre las posibles, segun la politica.
     }
 
 
