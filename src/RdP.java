@@ -210,4 +210,8 @@ public class RdP {
         }
         System.out.println("Cant de trans temporales sensibilizadas:" + cantSens);
     }
+
+    public boolean[] getSensibilizadas() {
+        return sensibilizadas;
+    }
 }

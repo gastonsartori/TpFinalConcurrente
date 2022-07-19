@@ -15,29 +15,17 @@ public class Politica {
         finalizo=false;
         invTr= new int[]{0, 2, 2, 2, 3, 3, 3, 0, 0, 1, 1, 1};//Indica a que linea pertenece cada transicion
         conflictos=new int[][]{{5,10},{5,10},{},{},{2},{},{},{},{},{7},{},{}};//Indica cuales transiciones no temporales, tienen conflicto con transiciones temporales.
-//        conflictos=new int[][]{{},{},{},{},{2},{},{},{},{},{7},{},{}};//Indica cuales transiciones no temporales, tienen conflicto con transiciones temporales.
     }
 
-    public ArrayList<Integer> determinarTr() { //Determina la transicion que puede ejecutarse
 
-        ArrayList<Integer> trDisparables = new ArrayList<>();//ArrayList de transiciones disparables ordenados de mayor a menor prioridad
 
-        for (int i = 0; i < Main.getCantT(); i++) { //Selecciono la transicion a analizar
-            if(RedDePetri.estaSensibilizada(i) && conflicto(i)){ // Solo si esta habilitada
-                for (int j = 0; j < Main.getCantT(); j++) {
-                    if(j==trDisparables.size()){
-                        trDisparables.add(j,i);
-                        break;
-                    }else {
-                        if(inv.getCantTransInvTr(i) < inv.getCantTransInvTr(trDisparables.get(j))){
-                                trDisparables.add(j,i);
-                            break;
-                        }
-                    }
-                }
+    public boolean sonDisparables(boolean[] transiciones) {
+        for (int i = 0; i < transiciones.length; i++) {
+            if(transiciones[i] && conflicto(i)){
+                return true;
             }
         }
-        return trDisparables;
+        return false;
     }
 
     /**
@@ -62,5 +50,19 @@ public class Politica {
             }
         }
         return habilitar;
+    }
+
+    public int determinarTr(boolean[] transiciones) { //Determina la transicion que puede ejecutarse
+        int trADisparar = -1;
+
+        for (int i = 0; i < transiciones.length; i++) { //Selecciono la transicion a analizar
+            if(transiciones[i] && conflicto(i)){ // Solo si tiene hilos esperando y esta sensibilizada
+                if(trADisparar == -1 || inv.getCantTransInvTr(i) < inv.getCantTransInvTr(trADisparar)){
+                    trADisparar = i;
+                }
+
+            }
+        }
+        return trADisparar;
     }
 }

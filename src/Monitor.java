@@ -8,6 +8,7 @@ public class Monitor {
     private boolean finalizo;
     private Politica politica;
     private Semaphore[] colas;
+    private boolean[] transSensConHilos;
 
     private int contador; //Se usa para el control de los 1000 invariantes que deben completarse
 
@@ -15,9 +16,9 @@ public class Monitor {
 
     public Monitor(RdP redDePetri,Politica politica) {
         RedDePetri = redDePetri;
+        transSensConHilos = new boolean[Main.getCantT()];
 
         mutex = new Semaphore(1);
-
         colas = new Semaphore[Main.getCantT()];
         for (int i = 0; i < colas.length; i++) {
             colas[i]=new Semaphore(0);
@@ -30,7 +31,6 @@ public class Monitor {
     public boolean disparar(int transicion){ //Ejecutado por cada hilo que quiera disparar una transicion
 
         try {
-//            System.out.println("ENTRO A DISPARAR " + transicion);
             mutex.acquire();
 
             if (!RedDePetri.estaSensibilizada(transicion)){
@@ -55,7 +55,7 @@ public class Monitor {
 
             //determina si despertar a otro hilo o solo salir del monitor
             if(hayHilosEsperando()){
-                Integer tr = cualDespertar();
+                int tr = politica.determinarTr(transSensConHilos);
                 colas[tr].release();
             }else{
                 mutex.release();
@@ -67,28 +67,31 @@ public class Monitor {
         return true;
     }
 
+    /**
+     * Devuelve si hay alguna transicion sensibilizada que tenga hilos esperando, y pueda ser disparada.
+     * @return boolean
+     */
     public boolean hayHilosEsperando(){
 
-        trDisparables = politica.determinarTr();
+        boolean[] sensibilizadas = RedDePetri.getSensibilizadas();
+        boolean[] hilosEnColas = getHilosEnColas();
 
-        for (int i = 0; i < trDisparables.size(); i++) {
-            Integer trDisparable = trDisparables.get(i);
-            if(colas[trDisparable].hasQueuedThreads()){
-                return true;
-            }
+
+        for (int i = 0; i < sensibilizadas.length; i++) {
+            transSensConHilos[i] = hilosEnColas[i] && sensibilizadas[i];
         }
-        return false;
+
+        return politica.sonDisparables(transSensConHilos);
     }
 
-    public Integer cualDespertar(){
 
-        for (int i = 0; i < trDisparables.size(); i++) {
-            Integer tr = trDisparables.get(i);
-            if(colas[tr].hasQueuedThreads()){
-                return tr;
-            }
+    private boolean[] getHilosEnColas(){
+        boolean[] hilosEnCola = new boolean[Main.getCantT()];
+
+        for (int i = 0; i < colas.length; i++) {
+            hilosEnCola[i] = colas[i].hasQueuedThreads();
         }
-        return -1;
+        return hilosEnCola;
     }
 
     public synchronized void incContador(){
